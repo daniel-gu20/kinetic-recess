@@ -95,6 +95,7 @@ const jsonLd = {
 </Layout>
 
 <script>
+  import { sendFormEmail } from "../scripts/formsubmit";
   const form = document.getElementById("inquiry-form") as HTMLFormElement | null;
   const success = document.getElementById("success-panel");
   const btn = document.getElementById("submit-btn") as HTMLButtonElement | null;
@@ -104,16 +105,34 @@ const jsonLd = {
     if (!form.checkValidity()) { form.reportValidity(); return; }
     if (btn) { btn.disabled = true; btn.textContent = "Sending the brief…"; }
 
-    const payload = Object.fromEntries(new FormData(form).entries());
+    const payload = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
     try {
-      const res = await fetch("/api/corporate-inquiry", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) throw new Error(String(res.status));
+      await Promise.allSettled([
+        // 1. Persist to the CMS (server)
+        fetch("/api/corporate-inquiry", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }),
+        // 2. Email confirmation + team notification (browser → FormSubmit)
+        sendFormEmail({
+          email: payload.email,
+          subject: `New corporate inquiry: ${payload.companyName} (${payload.teamSize || "?"})`,
+          autoresponse:
+            "Booked the request. We'll email you within a day with a park, a date, and a referee who " +
+            "pretends to be impartial. Your night also funds a free community session, so, you know, hero stuff.\n\n" +
+            "No deposit to inquire — we'll confirm the park permit and headcount before you owe a cent.\n\n— Kinetic Recess",
+          fields: {
+            Contact: payload.contactName,
+            Company: payload.companyName,
+            "Team size": payload.teamSize || "—",
+            "Preferred dates": payload.preferredDates || "—",
+            "Game preference": payload.gamePreference || "—",
+            Notes: payload.notes || "—",
+          },
+        }),
+      ]);
     } catch (err) {
-      // Inquiry endpoint not wired to a collection yet — still confirm to the user.
       console.error("Inquiry submit failed:", err);
     } finally {
       form.classList.add("hidden");

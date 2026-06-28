@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 import { items } from "@wix/data";
 import { auth } from "@wix/essentials";
-import { notifySubmission } from "../../lib/email";
 
 export const prerender = false;
 
@@ -42,28 +41,8 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     const insert = auth.elevate(items.insert);
     await insert(COLLECTION_ID, item);
-
-    // Notify the team + auto-reply to the visitor. Awaited so the serverless
-    // runtime doesn't terminate before the email request completes.
-    const free = item.type === "community";
-    const when = [item.sessionDay, item.sessionTime, item.park].filter(Boolean).join(" · ");
-    await notifySubmission({
-      visitorEmail: item.email,
-      subject: `New ${free ? "free " : ""}reservation: ${item.sessionName} — ${item.name}`,
-      autoresponse:
-        `${free ? "Spot saved." : "Spot held."} We'll see you at ${item.sessionName}${when ? ` — ${when}` : ""}.\n\n` +
-        `Bring runners, water, and a willingness to lose gracefully.` +
-        `${free ? " Free community night — no fee." : " $18 at the park; sessions cap at 24."}\n\n` +
-        `There's a referee. It won't stop the argument. That's the point.\n\n— Kinetic Recess`,
-      fields: {
-        Name: item.name,
-        Game: item.sessionName,
-        When: when,
-        "Party size": item.partySize || "1",
-        Type: free ? "Community night (free)" : "Public drop-in",
-      },
-    }).catch((e) => console.error("[reservation] email failed:", e));
-
+    // Emails are sent client-side (FormSubmit) — see ReserveModal.astro — because
+    // FormSubmit's Cloudflare bot-check blocks server (datacenter) IPs.
     return json({ ok: true }, 200);
   } catch (err) {
     console.error("[reservation] insert failed:", err);

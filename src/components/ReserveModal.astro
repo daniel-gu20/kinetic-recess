@@ -58,6 +58,7 @@
 </dialog>
 
 <script>
+  import { sendFormEmail } from "../scripts/formsubmit";
   const modal = document.getElementById("reserve-modal") as HTMLDialogElement | null;
   if (modal) {
     const formView = document.getElementById("reserve-form-view")!;
@@ -102,14 +103,35 @@
       if (!form.checkValidity()) { form.reportValidity(); return; }
       submitBtn.disabled = true;
       submitBtn.textContent = "Holding it…";
-      const payload = Object.fromEntries(new FormData(form).entries());
+      const payload = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+      const free = payload.type === "community";
+      const when = [payload.sessionDay, payload.sessionTime, payload.park].filter(Boolean).join(" · ");
       try {
-        const res = await fetch("/api/reservation", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error(String(res.status));
+        await Promise.allSettled([
+          // 1. Persist to the CMS (server)
+          fetch("/api/reservation", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          }),
+          // 2. Email confirmation + team notification (browser → FormSubmit)
+          sendFormEmail({
+            email: payload.email,
+            subject: `New ${free ? "free " : ""}reservation: ${payload.sessionName} — ${payload.name}`,
+            autoresponse:
+              `${free ? "Spot saved." : "Spot held."} We'll see you at ${payload.sessionName}${when ? ` — ${when}` : ""}.\n\n` +
+              `Bring runners, water, and a willingness to lose gracefully.` +
+              `${free ? " Free community night — no fee." : " $18 at the park; sessions cap at 24."}\n\n` +
+              `There's a referee. It won't stop the argument. That's the point.\n\n— Kinetic Recess`,
+            fields: {
+              Name: payload.name,
+              Game: payload.sessionName,
+              When: when,
+              "Party size": payload.partySize || "1",
+              Type: free ? "Community night (free)" : "Public drop-in",
+            },
+          }),
+        ]);
       } catch (err) {
         console.error("Reservation submit failed:", err);
       } finally {
