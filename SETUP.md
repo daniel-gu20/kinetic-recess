@@ -32,32 +32,38 @@ public/images/            ← self-hosted playground photography (from Stitch ge
 - Sharp corners, photography-first, navy scrims for text legibility over images.
 - `prefers-reduced-motion` snaps chalk-draw animations to their final state.
 
-## Content → CMS (currently local, ready to migrate)
+## CMS collections
 
-Pages render from `src/data/site.ts` so the site works immediately. To move to the
-Wix CMS (per spec), create these collections in the dashboard (CMS → Collections) and
-swap the imports for `@wix/data` queries:
+Form submissions persist to two Wix CMS collections (created via the Data SDK,
+visible in the dashboard under CMS → Collections):
 
-| Collection          | Fields |
-|---------------------|--------|
-| `Session`           | gameName, dayOfWeek, startTime, park, neighborhood, sessionType, spotsLeft (number), difficulty, price, blurb, image |
-| `CommunityNight`    | gameName, date, park, funder, spotsLeft (number), blurb |
-| `Review`            | name, quote, detail |
-| `StoryBlock`        | heading, body |
-| `CorporateInquiries`| contactName, companyName, email, teamSize, preferredDates, gamePreference, notes, status |
+| Collection           | Fields |
+|----------------------|--------|
+| `Reservations`       | name, email, sessionName, sessionDay, sessionTime, park, partySize, type, status |
+| `CorporateInquiries` | contactName, companyName, email, teamSize, preferredDates, gamePreference, notes, status |
 
-### Corporate booking form
+- `src/pages/api/reservation.ts` → inserts into `Reservations` (the "Grab a spot" / "Save my spot" modal).
+- `src/pages/api/corporate-inquiry.ts` → inserts into `CorporateInquiries`.
+- Both use `auth.elevate()` so anonymous visitors can write while the collections stay private.
 
-`src/pages/api/corporate-inquiry.ts` inserts into the **`CorporateInquiries`** collection
-using `auth.elevate()` (so anonymous visitors can submit). Until that collection exists the
-endpoint returns 500 and the form still shows the success state. Once the collection is
-created in the dashboard, submissions persist automatically — no code change needed.
+**Display content** (sessions, community nights, reviews, FAQ, parks, story) still renders
+from `src/data/site.ts`. To make it editable in the CMS, create matching collections
+(`Session`, `CommunityNight`, `Review`, `StoryBlock`) and swap the imports for `@wix/data` queries.
+
+### Emails (Wix Automations — no code)
+
+Submissions are captured but don't email yet. In the dashboard → **Automations → New**:
+
+1. **Confirmation:** Trigger = *Wix CMS → item created* in `Reservations` → Action = *Send email*
+   to the item's `email` field. Repeat for `CorporateInquiries`.
+2. **Team notification:** same trigger → *Send email notification* to your team inbox.
+
+No API keys needed; deliverability is handled by Wix.
 
 ## Images
 
-`public/images/*.png` are the floodlit playground photos generated during design. For best
-Lighthouse scores, convert them to AVIF/WebP and add responsive `srcset` (spec target:
-LCP < 2.5s). The hero uses `fetchpriority="high"`.
+`public/images/*.webp` are the floodlit playground photos (resized + compressed from the
+original PNGs, ~9.5MB → ~450KB total). The hero uses `fetchpriority="high"`; cards lazy-load.
 
 ## SEO
 
