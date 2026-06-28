@@ -1,6 +1,5 @@
 ---
 import type { Session } from "../data/site";
-import { CTA } from "../data/site";
 import Icon from "./Icon.astro";
 interface Props { session: Session }
 const { session } = Astro.props;
@@ -54,7 +53,16 @@ const low = session.spotsLeft > 0 && session.spotsLeft <= 4;
       {soldOut ? (
         <button disabled class="bg-surface-container-highest text-on-surface-variant cursor-not-allowed px-6 py-2 font-label-bold uppercase">Waitlist</button>
       ) : (
-        <a href={CTA.primary.href} class="bg-primary text-on-primary px-6 py-2 font-label-bold uppercase hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-colors">Grab a spot</a>
+        <button
+          type="button"
+          data-reserve
+          data-session-name={session.gameName}
+          data-session-day={session.dayOfWeek}
+          data-session-time={session.startTime}
+          data-park={session.park}
+          data-type="public"
+          class="bg-primary text-on-primary px-6 py-2 font-label-bold uppercase hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-colors"
+        >Grab a spot</button>
       )}
     </div>
   </div>

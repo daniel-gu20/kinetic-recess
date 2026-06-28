@@ -33,7 +33,15 @@ import { COMMUNITY_NIGHTS, CTA } from "../data/site";
             </p>
             <p class="font-body-md text-body-md text-on-surface-variant mt-3 flex-1">{n.blurb}</p>
             <p class="font-accent-script text-[18px] text-secondary mt-3">{n.funder}</p>
-            <a href={CTA.free.href} class="mt-5 text-center bg-secondary-fixed text-on-secondary-fixed px-6 py-3 font-display text-[18px] uppercase tracking-wide hover:bg-secondary-fixed-dim transition-colors">{CTA.free.label}</a>
+            <button
+              type="button"
+              data-reserve
+              data-session-name={n.gameName}
+              data-session-day={n.date}
+              data-park={n.park}
+              data-type="community"
+              class="mt-5 text-center bg-secondary-fixed text-on-secondary-fixed px-6 py-3 font-display text-[18px] uppercase tracking-wide hover:bg-secondary-fixed-dim transition-colors"
+            >{CTA.free.label}</button>
           </div>
         </article>
       ))}

@@ -1,0 +1,121 @@
+---
+// Reservation dialog. Any button with [data-reserve] + data-session-* attributes
+// opens it pre-filled; submitting posts to /api/reservation.
+---
+<dialog id="reserve-modal" class="bg-transparent p-0 backdrop:bg-black/60 m-auto">
+  <div class="relative w-[92vw] max-w-lg bg-surface-container-lowest border-2 border-primary p-7 md:p-9">
+    <button data-close aria-label="Close" class="absolute top-3 right-3 text-primary text-2xl leading-none w-9 h-9 hover:bg-surface-container-high">×</button>
+
+    <!-- Form view -->
+    <div id="reserve-form-view">
+      <p class="font-marker text-secondary text-[20px]" id="reserve-eyebrow">Grab a spot</p>
+      <h2 class="font-display text-[clamp(1.6rem,5vw,2.25rem)] leading-none uppercase text-primary mt-1">Hold your spot</h2>
+
+      <div id="reserve-summary" class="mt-4 border-l-4 border-secondary-fixed bg-surface-container-low px-4 py-3">
+        <p class="font-headline-md text-[18px] uppercase text-primary" id="reserve-game">—</p>
+        <p class="font-body-md text-[14px] text-on-surface-variant" id="reserve-when">—</p>
+      </div>
+
+      <form id="reserve-form" class="mt-5 grid gap-4" novalidate>
+        <input type="hidden" name="sessionName" id="f-sessionName" />
+        <input type="hidden" name="sessionDay" id="f-sessionDay" />
+        <input type="hidden" name="sessionTime" id="f-sessionTime" />
+        <input type="hidden" name="park" id="f-park" />
+        <input type="hidden" name="type" id="f-type" value="public" />
+        <div>
+          <label for="f-name" class="block font-label-bold text-label-bold uppercase text-on-surface mb-1">Full name</label>
+          <input id="f-name" name="name" type="text" required autocomplete="name" class="w-full bg-surface-container-low border-0 border-b-2 border-primary px-2 py-2 font-body-md text-body-md focus:outline-none focus:border-secondary-fixed" />
+        </div>
+        <div>
+          <label for="f-email" class="block font-label-bold text-label-bold uppercase text-on-surface mb-1">Email</label>
+          <input id="f-email" name="email" type="email" required autocomplete="email" class="w-full bg-surface-container-low border-0 border-b-2 border-primary px-2 py-2 font-body-md text-body-md focus:outline-none focus:border-secondary-fixed" />
+        </div>
+        <div>
+          <label for="f-partySize" class="block font-label-bold text-label-bold uppercase text-on-surface mb-1">How many of you?</label>
+          <select id="f-partySize" name="partySize" class="w-full bg-surface-container-low border-0 border-b-2 border-primary px-2 py-2.5 font-body-md text-body-md focus:outline-none focus:border-secondary-fixed">
+            <option value="1">Just me</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        </div>
+        <button type="submit" id="reserve-submit" class="mt-1 bg-secondary-fixed text-on-secondary-fixed px-8 py-3.5 font-display text-[20px] uppercase tracking-wide hover:bg-secondary-fixed-dim active:scale-[0.99] transition-all">Confirm my spot</button>
+        <p id="reserve-fineprint" class="font-body-md text-[13px] text-on-surface-variant">$18, paid at the park. No card needed to hold your spot — sessions cap at 24.</p>
+      </form>
+    </div>
+
+    <!-- Success view -->
+    <div id="reserve-success" hidden>
+      <p class="font-marker text-secondary text-[22px] -rotate-2">You're in.</p>
+      <h2 class="font-display text-[clamp(1.6rem,5vw,2.25rem)] leading-none uppercase text-primary mt-1">Spot held.</h2>
+      <p class="font-body-lg text-body-lg text-on-surface-variant mt-4">
+        Check your inbox — we'll send a confirmation with the park, the meeting spot, and a
+        referee who pretends to be impartial. Bring runners and a grudge.
+      </p>
+      <button data-close class="mt-6 bg-primary text-on-primary px-8 py-3.5 font-display text-[18px] uppercase tracking-wide hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-colors">Done</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const modal = document.getElementById("reserve-modal") as HTMLDialogElement | null;
+  if (modal) {
+    const formView = document.getElementById("reserve-form-view")!;
+    const successView = document.getElementById("reserve-success")!;
+    const form = document.getElementById("reserve-form") as HTMLFormElement;
+    const submitBtn = document.getElementById("reserve-submit") as HTMLButtonElement;
+
+    const setText = (id: string, v: string) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    const setVal = (id: string, v: string) => { const el = document.getElementById(id) as HTMLInputElement | null; if (el) el.value = v; };
+
+    function openFor(d: DOMStringMap) {
+      const isCommunity = d.type === "community";
+      setText("reserve-eyebrow", isCommunity ? "Save my spot — free" : "Grab a spot");
+      setText("reserve-game", d.sessionName || "");
+      const when = [d.sessionDay, d.sessionTime, d.park].filter(Boolean).join(" · ");
+      setText("reserve-when", when);
+      setVal("f-sessionName", d.sessionName || "");
+      setVal("f-sessionDay", d.sessionDay || "");
+      setVal("f-sessionTime", d.sessionTime || "");
+      setVal("f-park", d.park || "");
+      setVal("f-type", d.type || "public");
+      const fp = document.getElementById("reserve-fineprint");
+      if (fp) fp.textContent = isCommunity
+        ? "Free community night — no fee. We just need a headcount for foam balls."
+        : "$18, paid at the park. No card needed to hold your spot — sessions cap at 24.";
+      submitBtn.textContent = isCommunity ? "Save my free spot" : "Confirm my spot";
+      form.reset();
+      successView.hidden = true;
+      formView.hidden = false;
+      submitBtn.disabled = false;
+      modal!.showModal();
+    }
+
+    document.querySelectorAll<HTMLElement>("[data-reserve]").forEach((btn) => {
+      btn.addEventListener("click", () => openFor(btn.dataset));
+    });
+    modal.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("click", () => modal.close()));
+    modal.addEventListener("click", (e) => { if (e.target === modal) modal.close(); });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Holding it…";
+      const payload = Object.fromEntries(new FormData(form).entries());
+      try {
+        const res = await fetch("/api/reservation", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+      } catch (err) {
+        console.error("Reservation submit failed:", err);
+      } finally {
+        formView.hidden = true;
+        successView.hidden = false;
+      }
+    });
+  }
+</script>
