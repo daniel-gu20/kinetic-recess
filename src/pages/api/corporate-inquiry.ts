@@ -40,8 +40,9 @@ export const POST: APIRoute = async ({ request }) => {
     const insert = auth.elevate(items.insert);
     await insert(COLLECTION_ID, item);
 
-    // Notify the team + auto-reply to the submitter (no-op if email isn't set up).
-    notifySubmission({
+    // Notify the team + auto-reply to the submitter. Awaited so the serverless
+    // runtime doesn't terminate before the email request completes.
+    await notifySubmission({
       visitorEmail: item.email,
       subject: `New corporate inquiry: ${item.companyName} (${item.teamSize || "?"})`,
       autoresponse:
@@ -56,7 +57,7 @@ export const POST: APIRoute = async ({ request }) => {
         "Game preference": item.gamePreference || "—",
         Notes: item.notes || "—",
       },
-    });
+    }).catch((e) => console.error("[corporate-inquiry] email failed:", e));
 
     return json({ ok: true }, 200);
   } catch (err) {

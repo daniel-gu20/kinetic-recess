@@ -43,10 +43,11 @@ export const POST: APIRoute = async ({ request }) => {
     const insert = auth.elevate(items.insert);
     await insert(COLLECTION_ID, item);
 
-    // Notify the team + auto-reply to the visitor (no-op if email isn't set up).
+    // Notify the team + auto-reply to the visitor. Awaited so the serverless
+    // runtime doesn't terminate before the email request completes.
     const free = item.type === "community";
     const when = [item.sessionDay, item.sessionTime, item.park].filter(Boolean).join(" · ");
-    notifySubmission({
+    await notifySubmission({
       visitorEmail: item.email,
       subject: `New ${free ? "free " : ""}reservation: ${item.sessionName} — ${item.name}`,
       autoresponse:
@@ -61,7 +62,7 @@ export const POST: APIRoute = async ({ request }) => {
         "Party size": item.partySize || "1",
         Type: free ? "Community night (free)" : "Public drop-in",
       },
-    });
+    }).catch((e) => console.error("[reservation] email failed:", e));
 
     return json({ ok: true }, 200);
   } catch (err) {
