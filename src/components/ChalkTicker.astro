@@ -1,0 +1,26 @@
+---
+// Scrolling band of referee "rulings" — pure brand voice. Pauses on hover.
+const calls = [
+  "You were NOT out.",
+  "Check the line.",
+  "Disputed.",
+  "Official ruling →",
+  "Do-over denied.",
+  "That's a tag.",
+  "Argue accordingly.",
+  "The server cheated.",
+];
+// Duplicate the list so the -50% loop is seamless.
+const row = [...calls, ...calls];
+---
+<section class="ticker bg-tertiary text-on-tertiary border-y-2 border-secondary-fixed py-4" aria-hidden="true">
+  <div class="ticker-track">
+    {row.map((c) => (
+      <span class="inline-flex items-center">
+        <span class="font-marker text-[#F4EFE2] text-[26px] md:text-[30px] px-6">{c}</span>
+        <span class="text-secondary-fixed text-[20px]">✦</span>
+      </span>
+    ))}
+  </div>
+</section>
+<span class="sr-only">A referee's running commentary: you were not out, check the line, disputed, official ruling, do-over denied.</span>

@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import SessionCard from "../components/SessionCard.astro";
 import ChalkDivider from "../components/ChalkDivider.astro";
 import ChalkNote from "../components/ChalkNote.astro";
+import ChalkTicker from "../components/ChalkTicker.astro";
 import { SESSIONS, REVIEWS, HOW_IT_WORKS, COMMUNITY_NIGHTS, CTA, SITE } from "../data/site";
 
 const thisWeek = SESSIONS.slice(0, 3);
@@ -20,7 +21,7 @@ const jsonLd = {
 
 <Layout title={SITE.name} path="/" jsonLd={jsonLd}>
   <!-- 1 ── Hero -->
-  <section class="relative min-h-[88vh] flex items-end overflow-hidden">
+  <section data-floodlight class="relative min-h-[88vh] flex items-end overflow-hidden">
     <img
       src="/images/hero-playground-night.webp"
       alt="A floodlit Toronto schoolyard field at night with adults playing a rowdy game and the city skyline behind"
@@ -30,7 +31,7 @@ const jsonLd = {
       class="absolute inset-0 w-full h-full object-cover"
     />
     <div class="absolute inset-0 scrim-bottom"></div>
-    <div class="relative w-full max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop pb-stack-md pt-32">
+    <div class="relative z-10 w-full max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop pb-stack-md pt-32">
       <p class="hero-rise font-marker text-[18px] md:text-[22px] tracking-wide text-[#F4EFE2]/85 mb-5" style="animation-delay:.05s">After-hours playground league · Toronto</p>
 
       <div class="grid lg:grid-cols-[auto_1fr] gap-x-12 gap-y-7 items-center">
@@ -77,9 +78,9 @@ const jsonLd = {
 
   <!-- 2 ── How it works -->
   <section class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl">
-    <h2 class="font-display text-[clamp(2rem,5vw,3.5rem)] leading-none uppercase text-primary mb-2">How recess works</h2>
-    <p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-md max-w-xl">Three steps. No memberships. No journey.</p>
-    <div class="grid md:grid-cols-3 gap-gutter">
+    <h2 data-reveal class="font-display text-[clamp(2rem,5vw,3.5rem)] leading-none uppercase text-primary mb-2">How recess works</h2>
+    <p data-reveal class="font-body-lg text-body-lg text-on-surface-variant mb-stack-md max-w-xl">Three steps. No memberships. No journey.</p>
+    <div data-reveal-stagger class="grid md:grid-cols-3 gap-gutter">
       {HOW_IT_WORKS.map((step) => (
         <div class="bg-surface-container-lowest border border-border p-8">
           <span class="font-display text-[64px] leading-none text-secondary-fixed-dim">{step.n}</span>
@@ -107,8 +108,8 @@ const jsonLd = {
   </section>
 
   <!-- 4 ── Community nights (funded by corporate) -->
-  <section class="bg-primary text-on-primary">
-    <div class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl grid lg:grid-cols-2 gap-stack-md items-center">
+  <section data-floodlight class="bg-primary text-on-primary">
+    <div class="relative z-10 max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl grid lg:grid-cols-2 gap-stack-md items-center">
       <div>
         <p class="font-accent-script text-[24px] text-[#F4EFE2]/85">Funded by corporate</p>
         <h2 class="font-display text-[clamp(2rem,5vw,3.5rem)] leading-[0.95] uppercase mt-1">Your team-building literally buys someone else recess.</h2>
@@ -152,8 +153,8 @@ const jsonLd = {
 
   <!-- 6 ── Reviews -->
   <section class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop pb-stack-xl">
-    <h2 class="font-display text-[clamp(2rem,5vw,3.5rem)] leading-none uppercase text-primary mb-stack-md">Grown adults, genuinely out of breath.</h2>
-    <div class="grid md:grid-cols-3 gap-gutter">
+    <h2 data-reveal class="font-display text-[clamp(2rem,5vw,3.5rem)] leading-none uppercase text-primary mb-stack-md">Grown adults, genuinely out of breath.</h2>
+    <div data-reveal-stagger class="grid md:grid-cols-3 gap-gutter">
       {REVIEWS.map((r) => (
         <figure class="bg-surface-container-lowest border border-border p-8 flex flex-col">
           <span class="font-display text-[56px] leading-none text-secondary-fixed-dim">&ldquo;</span>
@@ -167,11 +168,14 @@ const jsonLd = {
     </div>
   </section>
 
+  <!-- Referee-call ticker -->
+  <ChalkTicker />
+
   <!-- 7 ── The rules (and the arguing) -->
-  <section class="bg-tertiary text-on-tertiary relative overflow-hidden">
-    <ChalkNote text="you were NOT out." rotate={-8} class="hidden lg:flex absolute top-12 right-16 text-[#F4EFE2]/80 text-[30px]" />
-    <ChalkNote text="disputed." rotate={6} class="hidden lg:flex absolute bottom-14 left-20 text-[#F4EFE2]/70 text-[26px]" />
-    <div class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl text-center relative">
+  <section data-floodlight class="bg-tertiary text-on-tertiary relative overflow-hidden">
+    <ChalkNote text="you were NOT out." rotate={-8} class="hidden lg:flex absolute top-12 right-16 text-[#F4EFE2]/80 text-[30px] z-10" />
+    <ChalkNote text="disputed." rotate={6} class="hidden lg:flex absolute bottom-14 left-20 text-[#F4EFE2]/70 text-[26px] z-10" />
+    <div class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl text-center relative z-10">
       <p class="font-accent-script text-[26px] text-[#F4EFE2]/80">The rules (and the arguing)</p>
       <h2 class="font-display text-[clamp(2.2rem,6vw,5rem)] leading-[0.95] uppercase max-w-4xl mx-auto mt-2">
         Yes, there's a referee. No, that won't stop the debate.

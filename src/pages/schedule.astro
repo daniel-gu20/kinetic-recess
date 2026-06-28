@@ -20,10 +20,10 @@ const jsonLd = SESSIONS.map((s) => ({
 
 <Layout title="The Schedule" description="The weekly grid of playground games across Toronto parks. Dodgeball, four square, capture the flag and kickball, Tuesday through Sunday." path="/schedule" jsonLd={jsonLd}>
   <!-- Hero banner -->
-  <section class="relative h-[40vh] min-h-[320px] flex items-end overflow-hidden">
+  <section data-floodlight class="relative h-[40vh] min-h-[320px] flex items-end overflow-hidden">
     <img src="/images/capture-the-flag.webp" alt="Adults playing capture the flag in a floodlit Toronto park" fetchpriority="high" class="absolute inset-0 w-full h-full object-cover" />
     <div class="absolute inset-0 scrim-bottom"></div>
-    <div class="relative w-full max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop pb-stack-md pt-28">
+    <div class="relative z-10 w-full max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop pb-stack-md pt-28">
       <h1 class="font-display text-[clamp(2.5rem,8vw,5.5rem)] leading-none uppercase text-on-primary">The Schedule</h1>
       <p class="font-accent-script text-[24px] text-[#F4EFE2]/85">Tue–Sun, after dark. Pick your battlefield.</p>
     </div>

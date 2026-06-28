@@ -210,6 +210,57 @@
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* ── Scroll reveal ─────────────────────────────────────────────────────── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+[data-reveal].is-visible { opacity: 1; transform: none; }
+/* staggered children */
+[data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.55s ease-out, transform 0.55s ease-out;
+}
+[data-reveal-stagger].is-visible > * { opacity: 1; transform: none; }
+[data-reveal-stagger].is-visible > *:nth-child(2) { transition-delay: 0.08s; }
+[data-reveal-stagger].is-visible > *:nth-child(3) { transition-delay: 0.16s; }
+[data-reveal-stagger].is-visible > *:nth-child(4) { transition-delay: 0.24s; }
+
+/* ── Floodlight cursor glow (on dark zones) ───────────────────────────── */
+[data-floodlight] { position: relative; }
+[data-floodlight]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2; /* above bg image/scrim; mark text content with z-10 to sit on top */
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 25%),
+    rgba(255, 231, 76, 0.16),
+    rgba(255, 231, 76, 0.05) 35%,
+    transparent 62%
+  );
+  transition: background 0.12s ease-out;
+}
+
+/* ── Referee-call ticker ──────────────────────────────────────────────── */
+.ticker { overflow: hidden; }
+.ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  will-change: transform;
+  animation: ticker-scroll 28s linear infinite;
+}
+.ticker:hover .ticker-track { animation-play-state: paused; }
+@keyframes ticker-scroll { to { transform: translateX(-50%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal], [data-reveal-stagger] > * { opacity: 1 !important; transform: none !important; }
+  .ticker-track { animation: none; transform: none; }
+}
+
 /* Chalk-draw line reveal (SVG stroke). Add .chalk-draw to a stroked path. */
 .chalk-draw {
   stroke-dasharray: 1200;

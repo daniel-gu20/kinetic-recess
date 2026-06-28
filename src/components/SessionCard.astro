@@ -6,7 +6,7 @@ const { session } = Astro.props;
 const soldOut = session.spotsLeft <= 0;
 const low = session.spotsLeft > 0 && session.spotsLeft <= 4;
 ---
-<article class="group bg-surface-container-lowest border border-border overflow-hidden flex flex-col hover:border-secondary-fixed transition-colors">
+<article class="group bg-surface-container-lowest border border-border overflow-hidden flex flex-col hover:border-secondary-fixed hover:-translate-y-1.5 hover:-rotate-[0.4deg] transition-[transform,border-color] duration-300 ease-out will-change-transform">
   <div class="relative h-48 overflow-hidden">
     <img
       src={session.image}
@@ -40,7 +40,7 @@ const low = session.spotsLeft > 0 && session.spotsLeft <= 4;
         "px-3 py-2 flex flex-col items-center leading-none shrink-0",
         soldOut ? "bg-surface-container-highest text-on-surface-variant" : "bg-secondary-fixed text-on-secondary-fixed",
       ]}>
-        <span class="font-display text-[24px]">{String(session.spotsLeft).padStart(2, "0")}</span>
+        <span class="font-display text-[24px]" data-countup={session.spotsLeft}>{String(session.spotsLeft).padStart(2, "0")}</span>
         <span class="font-label-bold text-[10px] uppercase">Spots</span>
       </div>
     </div>
