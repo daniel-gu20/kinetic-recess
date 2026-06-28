@@ -1,0 +1,23 @@
+---
+// Referee's chalk annotation — a short handwritten scrawl, slightly tilted,
+// optionally with a hand-drawn chalk underline. Decorative; aria-hidden.
+interface Props {
+  text: string;
+  rotate?: number;
+  underline?: boolean;
+  class?: string;
+}
+const { text, rotate = -3, underline = false, class: className = "" } = Astro.props;
+---
+<span
+  class:list={["inline-flex flex-col items-start font-marker leading-none select-none pointer-events-none", className]}
+  style={`transform: rotate(${rotate}deg)`}
+  aria-hidden="true"
+>
+  <span>{text}</span>
+  {underline && (
+    <svg class="mt-1 w-full text-secondary-fixed/70" height="7" viewBox="0 0 120 7" preserveAspectRatio="none" fill="none">
+      <path d="M2 4 C 32 1, 74 7, 118 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </svg>
+  )}
+</span>

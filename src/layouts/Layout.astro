@@ -44,13 +44,10 @@ const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
 
-    <!-- Fonts: Anton (display) + Archivo Narrow (body) + Caveat (chalk accent) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Caveat:wght@500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Self-hosted fonts (@font-face in global.css). Preload the two used above the fold. -->
+    <link rel="preload" href="/fonts/anton.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/archivo-narrow-400.woff2" as="font" type="font/woff2" crossorigin />
+    {path === "/" && <link rel="preload" href="/fonts/permanent-marker.woff2" as="font" type="font/woff2" crossorigin />}
 
     {jsonLdArray.map((obj) => (
       <script type="application/ld+json" set:html={JSON.stringify(obj)} />
@@ -71,18 +68,5 @@ const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
   body {
     margin: 0;
     width: 100%;
-  }
-  .material-symbols-outlined {
-    font-family: "Material Symbols Outlined";
-    font-weight: normal;
-    font-style: normal;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
-    display: inline-block;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    vertical-align: middle;
   }
 </style>

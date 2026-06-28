@@ -61,7 +61,7 @@ export const SESSIONS: Session[] = [
     price: "$18 drop-in",
     blurb:
       "Foam balls, no mercy, one self-appointed villain per game. Last team standing buys nobody anything because that's not how recess works.",
-    image: "/images/dodgeball.png",
+    image: "/images/dodgeball.webp",
   },
   {
     gameName: "Capture the Flag (After Dark)",
@@ -75,7 +75,7 @@ export const SESSIONS: Session[] = [
     price: "$18 drop-in",
     blurb:
       "Two teams, two flags, one floodlit hill, and a forty-minute argument about whether you were actually tagged.",
-    image: "/images/capture-the-flag.png",
+    image: "/images/capture-the-flag.webp",
   },
   {
     gameName: "Four-Square Showdown",
@@ -89,7 +89,7 @@ export const SESSIONS: Session[] = [
     price: "$18 drop-in",
     blurb:
       "Return to the court where you first learned about betrayal. An official referee makes every line dispute count.",
-    image: "/images/four-square-court.png",
+    image: "/images/four-square-court.webp",
   },
   {
     gameName: "Championship Kickball",
@@ -103,7 +103,7 @@ export const SESSIONS: Session[] = [
     price: "$18 drop-in",
     blurb:
       "Slow-pitch rubber ball, fast-pitch opinions, everyone bats. Slide into home like it's 1998; ice packs not included.",
-    image: "/images/kickball.png",
+    image: "/images/kickball.webp",
   },
   {
     gameName: "No-Mercy Dodgeball",
@@ -116,7 +116,7 @@ export const SESSIONS: Session[] = [
     difficulty: "Rowdy",
     price: "$18 drop-in",
     blurb: "High-velocity foam therapy for the modern desk-worker. Bring a grudge.",
-    image: "/images/dodgeball.png",
+    image: "/images/dodgeball.webp",
   },
   {
     gameName: "Sunset Four Square",
@@ -129,7 +129,7 @@ export const SESSIONS: Session[] = [
     difficulty: "Casual",
     price: "$18 drop-in",
     blurb: "Chalk grid, golden hour, and a server who will absolutely insist they didn't double-touch.",
-    image: "/images/four-square-court.png",
+    image: "/images/four-square-court.webp",
   },
   {
     gameName: "Midnight Capture the Flag",
@@ -142,7 +142,7 @@ export const SESSIONS: Session[] = [
     difficulty: "Intense",
     price: "$18 drop-in",
     blurb: "The final showdown. Stealth, sprinting, and a floodlit hill in near-total darkness.",
-    image: "/images/capture-the-flag.png",
+    image: "/images/capture-the-flag.webp",
   },
   {
     gameName: "Kickball Block Party",
@@ -155,7 +155,7 @@ export const SESSIONS: Session[] = [
     difficulty: "Casual",
     price: "$18 drop-in",
     blurb: "Daytime kickball for people who want recess but also want to be home by dinner.",
-    image: "/images/kickball.png",
+    image: "/images/kickball.webp",
   },
 ];
 
@@ -271,28 +271,28 @@ export const PARKS: Park[] = [
     neighborhood: "West End",
     access: "Gate 4 entry off Dundas. Digital pass required; meet at the perimeter chalk grid.",
     bring: "Running shoes, water, thermal layer — it gets cold once the floodlights are the only heat.",
-    image: "/images/four-square-court.png",
+    image: "/images/four-square-court.webp",
   },
   {
     name: "Dufferin Grove Park",
     neighborhood: "West End",
     access: "Permitted after-hours field by the rink house. We hold the permit; just show up.",
     bring: "Outdoor soles, a friend, and your most disputed four-square memory.",
-    image: "/images/kickball.png",
+    image: "/images/kickball.webp",
   },
   {
     name: "Christie Pits Park",
     neighborhood: "West End",
     access: "Lower field, south entrance. Floodlit until 9pm; meeting spot is the dugout.",
     bring: "Cleats or grippy runners, water, and ice packs for the kickball slide.",
-    image: "/images/kickball.png",
+    image: "/images/kickball.webp",
   },
   {
     name: "Riverdale Park East",
     neighborhood: "East End",
     access: "Top of the hill by Broadview. After-hours access via the east path; we mark it with chalk.",
     bring: "Dark clothing optional, sprinting legs mandatory. Bring water.",
-    image: "/images/capture-the-flag.png",
+    image: "/images/capture-the-flag.webp",
   },
 ];
 

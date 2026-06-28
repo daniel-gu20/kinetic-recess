@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
 import { PARKS, SITE, CTA } from "../data/site";
 
 const jsonLd = PARKS.map((p) => ({
@@ -67,12 +68,12 @@ const pins = [
         {pins.map((p) => (
           <div class="absolute -translate-x-1/2 -translate-y-full flex flex-col items-center" style={`left:${p.x}%; top:${p.y}%`}>
             <span class="font-label-bold text-[11px] uppercase text-on-primary bg-primary/70 px-2 py-0.5 mb-1 whitespace-nowrap">{p.name}</span>
-            <span class="material-symbols-outlined text-secondary-fixed text-[34px] drop-shadow">location_on</span>
+            <Icon name="location" class="w-8 h-8 text-secondary-fixed drop-shadow" />
           </div>
         ))}
         <div class="absolute inset-0 flex items-end justify-center pb-12">
           <span class="bg-secondary-fixed text-on-secondary-fixed px-6 py-3 font-display text-[18px] uppercase tracking-wide group-hover:bg-secondary-fixed-dim transition-colors flex items-center gap-1">
-            <span class="material-symbols-outlined">map</span> Tap for interactive map
+<Icon name="map" class="w-5 h-5" /> Tap for interactive map
           </span>
         </div>
         <div class="absolute top-6 left-6 bg-primary text-on-primary px-4 py-2 font-label-bold text-[12px] uppercase">

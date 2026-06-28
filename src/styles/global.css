@@ -76,6 +76,8 @@
   --font-body-lg: "Archivo Narrow", sans-serif;
   --font-label-bold: "Archivo Narrow", sans-serif;
   --font-accent-script: "Caveat", "Brush Script MT", cursive;
+  /* Chalk/marker face — the brand's human voice (hero word, eyebrows, scrawls) */
+  --font-marker: "Permanent Marker", "Caveat", cursive;
 
   /* Type scale (sizes; line-heights below) */
   --text-display-2xl: 120px;
@@ -118,6 +120,44 @@
 /* max-w-container-max helper to match Stitch markup */
 @utility container-max {
   max-width: 1280px;
+}
+
+/* Self-hosted fonts (latin subset). `optional` on the big display + body faces
+   means the browser never does a layout-shifting late swap → near-zero CLS. */
+@font-face {
+  font-family: "Anton";
+  font-style: normal;
+  font-weight: 400;
+  font-display: optional;
+  src: url("/fonts/anton.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Archivo Narrow";
+  font-style: normal;
+  font-weight: 400;
+  font-display: optional;
+  src: url("/fonts/archivo-narrow-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Archivo Narrow";
+  font-style: normal;
+  font-weight: 600;
+  font-display: optional;
+  src: url("/fonts/archivo-narrow-600.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Caveat";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/caveat-600.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Permanent Marker";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/permanent-marker.woff2") format("woff2");
 }
 
 @layer base {
@@ -172,10 +212,38 @@
 
 /* Chalk-draw line reveal (SVG stroke). Add .chalk-draw to a stroked path. */
 .chalk-draw {
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
-  animation: chalk-stroke 0.9s ease-out forwards;
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  animation: chalk-stroke 0.6s ease-out forwards;
 }
 @keyframes chalk-stroke {
   to { stroke-dashoffset: 0; }
+}
+
+/* ── Hero chalk-draw load sequence ───────────────────────────────────────
+   The four-square court strokes itself on, then the word + headline + CTA
+   fade up in staggered order. Delays set inline per element. */
+.hero-court path {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: chalk-stroke 0.6s ease-out forwards;
+}
+.hero-rise {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: hero-rise 0.5s ease-out forwards;
+}
+@keyframes hero-rise {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Chalk-roughened stroke edges (applied via filter:url(#chalk-rough)) */
+.chalk-stroke {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-court path { stroke-dashoffset: 0 !important; animation: none !important; }
+  .hero-rise { opacity: 1 !important; transform: none !important; animation: none !important; }
 }

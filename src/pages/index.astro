@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import SessionCard from "../components/SessionCard.astro";
 import ChalkDivider from "../components/ChalkDivider.astro";
+import ChalkNote from "../components/ChalkNote.astro";
 import { SESSIONS, REVIEWS, HOW_IT_WORKS, COMMUNITY_NIGHTS, CTA, SITE } from "../data/site";
 
 const thisWeek = SESSIONS.slice(0, 3);
@@ -21,7 +22,7 @@ const jsonLd = {
   <!-- 1 ── Hero -->
   <section class="relative min-h-[88vh] flex items-end overflow-hidden">
     <img
-      src="/images/hero-playground-night.png"
+      src="/images/hero-playground-night.webp"
       alt="A floodlit Toronto schoolyard field at night with adults playing a rowdy game and the city skyline behind"
       fetchpriority="high"
       width="1344"
@@ -30,15 +31,44 @@ const jsonLd = {
     />
     <div class="absolute inset-0 scrim-bottom"></div>
     <div class="relative w-full max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop pb-stack-md pt-32">
-      <p class="font-accent-script text-[26px] md:text-[32px] text-secondary-fixed mb-2">After-hours playground league · Toronto</p>
-      <h1 class="font-display text-[clamp(2.5rem,9vw,7.5rem)] leading-[0.88] text-on-primary uppercase max-w-5xl">
-        Recess is back. <span class="text-secondary-fixed">You're just taller now.</span>
-      </h1>
-      <p class="font-body-lg text-body-lg text-on-primary/85 mt-6 max-w-xl">
+      <p class="hero-rise font-marker text-[18px] md:text-[22px] tracking-wide text-[#F4EFE2]/85 mb-5" style="animation-delay:.05s">After-hours playground league · Toronto</p>
+
+      <div class="grid lg:grid-cols-[auto_1fr] gap-x-12 gap-y-7 items-center">
+        <!-- Chalk four-square court with RECESS chalked inside -->
+        <div class="relative aspect-square w-[min(70vw,360px)] shrink-0">
+          <svg viewBox="0 0 100 100" class="hero-court absolute inset-0 w-full h-full overflow-visible" aria-hidden="true">
+            <defs>
+              <filter id="chalk-rough" x="-15%" y="-15%" width="130%" height="130%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="n" />
+                <feDisplacementMap in="SourceGraphic" in2="n" scale="1.4" xChannelSelector="R" yChannelSelector="G" />
+              </filter>
+            </defs>
+            <g filter="url(#chalk-rough)" stroke="#F4EFE2" stroke-width="1" fill="none" class="chalk-stroke">
+              <path d="M3 3 H97 V97 H3 Z" style="animation-delay:.1s" />
+              <path d="M50 4 V96" style="animation-delay:.5s" />
+              <path d="M4 50 H96" style="animation-delay:.65s" />
+            </g>
+          </svg>
+          <span class="hero-rise absolute top-[7%] left-[11%] font-marker text-[#F4EFE2]/40 text-[16px]" style="animation-delay:.55s">1</span>
+          <span class="hero-rise absolute top-[7%] right-[11%] font-marker text-[#F4EFE2]/40 text-[16px]" style="animation-delay:.6s">2</span>
+          <span class="hero-rise absolute bottom-[7%] left-[11%] font-marker text-[#F4EFE2]/40 text-[16px]" style="animation-delay:.65s">3</span>
+          <span class="hero-rise absolute bottom-[7%] right-[11%] font-marker text-[#F4EFE2]/40 text-[16px]" style="animation-delay:.7s">4</span>
+          <span class="hero-rise absolute inset-0 flex items-center justify-center font-marker text-secondary-fixed text-[clamp(2rem,8.5vw,4.25rem)] leading-none -rotate-2 drop-shadow-[0_2px_0_rgba(0,0,0,0.3)]" style="animation-delay:.8s">Recess</span>
+        </div>
+
+        <!-- The rest of the headline, in the scoreboard face -->
+        <h1 class="font-display text-[clamp(2.25rem,6.5vw,5rem)] leading-[0.85] text-on-primary uppercase">
+          <span class="hero-rise block" style="animation-delay:.95s">is back.</span>
+          <span class="hero-rise block" style="animation-delay:1.05s">You're just</span>
+          <span class="hero-rise block" style="animation-delay:1.15s">taller now.</span>
+        </h1>
+      </div>
+
+      <p class="hero-rise font-body-lg text-body-lg text-on-primary/85 mt-8 max-w-xl" style="animation-delay:1.25s">
         You peaked at four square in grade five. We built a league so you can prove it —
         real playground games in floodlit Toronto parks after work.
       </p>
-      <div class="mt-8 flex flex-col sm:flex-row gap-3">
+      <div class="hero-rise mt-7 flex flex-col sm:flex-row gap-3" style="animation-delay:1.35s">
         <a href={CTA.primary.href} class="bg-secondary-fixed text-on-secondary-fixed text-center px-8 py-4 font-display text-[20px] uppercase tracking-wide hover:bg-secondary-fixed-dim active:scale-95 transition-all">{CTA.primary.label}</a>
         <a href={CTA.corporate.href} class="border-2 border-on-primary/70 text-on-primary text-center px-8 py-4 font-display text-[20px] uppercase tracking-wide hover:border-secondary-fixed hover:text-secondary-fixed transition-colors">Book your office</a>
       </div>
@@ -80,7 +110,7 @@ const jsonLd = {
   <section class="bg-primary text-on-primary">
     <div class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl grid lg:grid-cols-2 gap-stack-md items-center">
       <div>
-        <p class="font-accent-script text-[24px] text-secondary-fixed">Funded by corporate</p>
+        <p class="font-accent-script text-[24px] text-[#F4EFE2]/85">Funded by corporate</p>
         <h2 class="font-display text-[clamp(2rem,5vw,3.5rem)] leading-[0.95] uppercase mt-1">Your team-building literally buys someone else recess.</h2>
         <p class="font-body-lg text-body-lg text-on-primary/80 mt-5 max-w-lg">
           Every office we run pays for a free community night. Same parks, same games, no fee —
@@ -92,7 +122,7 @@ const jsonLd = {
         {COMMUNITY_NIGHTS.map((n) => (
           <div class="border border-white/15 p-5 flex items-center justify-between gap-4 hover:border-secondary-fixed transition-colors">
             <div>
-              <h3 class="font-headline-md text-[20px] uppercase text-secondary-fixed">{n.gameName}</h3>
+              <h3 class="font-headline-md text-[20px] uppercase text-[#F4EFE2]">{n.gameName}</h3>
               <p class="font-body-md text-body-md text-on-primary/70">{n.date} · {n.park}</p>
             </div>
             <span class="font-label-bold text-[12px] uppercase text-on-primary/60 text-right shrink-0">{n.spotsLeft} spots<br/>free</span>
@@ -105,7 +135,7 @@ const jsonLd = {
   <!-- 5 ── Book your office -->
   <section class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl grid lg:grid-cols-2 gap-stack-md items-center">
     <div class="relative aspect-[4/3] overflow-hidden border border-border order-2 lg:order-1">
-      <img src="/images/corporate-team.png" alt="A corporate team playing a rowdy game under floodlights" loading="lazy" class="w-full h-full object-cover" />
+      <img src="/images/corporate-team.webp" alt="A corporate team playing a rowdy game under floodlights" loading="lazy" class="w-full h-full object-cover" />
     </div>
     <div class="order-1 lg:order-2">
       <p class="font-accent-script text-[24px] text-secondary -rotate-1">Book your office</p>
@@ -138,9 +168,11 @@ const jsonLd = {
   </section>
 
   <!-- 7 ── The rules (and the arguing) -->
-  <section class="bg-tertiary text-on-tertiary">
-    <div class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl text-center">
-      <p class="font-accent-script text-[26px] text-secondary-fixed">The rules (and the arguing)</p>
+  <section class="bg-tertiary text-on-tertiary relative overflow-hidden">
+    <ChalkNote text="you were NOT out." rotate={-8} class="hidden lg:flex absolute top-12 right-16 text-[#F4EFE2]/80 text-[30px]" />
+    <ChalkNote text="disputed." rotate={6} class="hidden lg:flex absolute bottom-14 left-20 text-[#F4EFE2]/70 text-[26px]" />
+    <div class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl text-center relative">
+      <p class="font-accent-script text-[26px] text-[#F4EFE2]/80">The rules (and the arguing)</p>
       <h2 class="font-display text-[clamp(2.2rem,6vw,5rem)] leading-[0.95] uppercase max-w-4xl mx-auto mt-2">
         Yes, there's a referee. No, that won't stop the debate.
       </h2>

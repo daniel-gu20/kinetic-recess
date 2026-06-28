@@ -1,15 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
 import { COMMUNITY_NIGHTS, CTA } from "../data/site";
 ---
 
 <Layout title="Community Nights" description="Free public playground sessions, funded by corporate bookings. Same parks, same games, no fee." path="/community">
   <!-- Hero -->
   <section class="relative h-[44vh] min-h-[340px] flex items-end overflow-hidden">
-    <img src="/images/kickball.png" alt="A packed free community kickball night under park lights" fetchpriority="high" class="absolute inset-0 w-full h-full object-cover" />
+    <img src="/images/kickball.webp" alt="A packed free community kickball night under park lights" fetchpriority="high" class="absolute inset-0 w-full h-full object-cover" />
     <div class="absolute inset-0 scrim-bottom"></div>
     <div class="relative w-full max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop pb-stack-md pt-28">
-      <p class="font-accent-script text-[24px] text-secondary-fixed">Under the lights, for the people</p>
+      <p class="font-accent-script text-[24px] text-[#F4EFE2]/85">Under the lights, for the people</p>
       <h1 class="font-display text-[clamp(2.5rem,8vw,5.5rem)] leading-none uppercase text-on-primary">Community Nights</h1>
       <p class="font-body-lg text-body-lg text-on-primary/85 mt-3 max-w-xl">Free public sessions funded by corporate bookings. Same parks, same games, no fee — just save a spot so we know how many foam balls to bring.</p>
     </div>
@@ -22,13 +23,13 @@ import { COMMUNITY_NIGHTS, CTA } from "../data/site";
       {COMMUNITY_NIGHTS.map((n) => (
         <article class="bg-surface-container-lowest border border-border flex flex-col">
           <div class="bg-primary text-on-primary px-6 py-4 flex items-baseline justify-between">
-            <span class="font-display text-[28px] uppercase text-secondary-fixed">{n.date}</span>
+            <span class="font-display text-[28px] uppercase text-[#F4EFE2]">{n.date}</span>
             <span class="font-label-bold text-[12px] uppercase text-on-primary/70">{n.spotsLeft} spots · free</span>
           </div>
           <div class="p-6 flex flex-col flex-1">
             <h3 class="font-headline-md text-[22px] uppercase text-primary">{n.gameName}</h3>
             <p class="font-label-bold text-label-bold text-on-surface-variant flex items-center gap-1 mt-1">
-              <span class="material-symbols-outlined text-[16px]">location_on</span>{n.park}
+              <Icon name="location" class="w-4 h-4 shrink-0" />{n.park}
             </p>
             <p class="font-body-md text-body-md text-on-surface-variant mt-3 flex-1">{n.blurb}</p>
             <p class="font-accent-script text-[18px] text-secondary mt-3">{n.funder}</p>
@@ -42,7 +43,7 @@ import { COMMUNITY_NIGHTS, CTA } from "../data/site";
   <!-- Don't watch from the sidelines band -->
   <section class="bg-primary text-on-primary">
     <div class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl text-center">
-      <h2 class="font-display text-[clamp(2.2rem,6vw,4.5rem)] leading-[0.95] uppercase">Don't watch from <span class="text-secondary-fixed">the sidelines.</span></h2>
+      <h2 class="font-display text-[clamp(2.2rem,6vw,4.5rem)] leading-[0.95] uppercase">Don't watch from <span class="text-[#F4EFE2]">the sidelines.</span></h2>
       <p class="font-body-lg text-body-lg text-on-primary/80 mt-4 max-w-xl mx-auto">Want more free nights on the calendar? They're paid for by offices booking team games. Tell yours.</p>
       <a href={CTA.corporate.href} class="inline-block mt-7 bg-secondary-fixed text-on-secondary-fixed px-8 py-4 font-display text-[20px] uppercase tracking-wide hover:bg-secondary-fixed-dim transition-colors">{CTA.corporate.label}</a>
     </div>

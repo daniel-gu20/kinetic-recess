@@ -1,0 +1,23 @@
+---
+// Inline SVG icons (replaces the Material Symbols font to cut a render-blocking request).
+interface Props { name: "location" | "menu" | "map" | "plus"; class?: string }
+const { name, class: className = "w-4 h-4" } = Astro.props;
+
+const paths: Record<Props["name"], string> = {
+  location:
+    "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z",
+  menu: "M3 6h18M3 12h18M3 18h18",
+  map: "M9 3 3 5.5v15l6-2.5 6 2.5 6-2.5v-15L15 5.5 9 3zm0 0v15m6-12.5v15",
+  plus: "M12 5v14M5 12h14",
+};
+const stroked = name === "menu" || name === "map" || name === "plus";
+---
+{stroked ? (
+  <svg class={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d={paths[name]} />
+  </svg>
+) : (
+  <svg class={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d={paths[name]} />
+  </svg>
+)}

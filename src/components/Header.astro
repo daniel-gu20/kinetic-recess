@@ -1,5 +1,6 @@
 ---
 import { NAV, CTA, SITE } from "../data/site";
+import Icon from "./Icon.astro";
 
 interface Props {
   path?: string;
@@ -58,7 +59,7 @@ const isActive = (href: string) =>
         aria-expanded="false"
         class="lg:hidden text-on-primary p-2 -mr-2"
       >
-        <span class="material-symbols-outlined text-[28px]">menu</span>
+        <Icon name="menu" class="w-7 h-7" />
       </button>
     </div>
   </nav>
