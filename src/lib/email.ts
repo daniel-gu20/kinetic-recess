@@ -20,7 +20,13 @@ export async function notifySubmission({ visitorEmail, subject, autoresponse, fi
   try {
     const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(team)}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      // Origin/Referer required — FormSubmit rejects requests without them.
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Origin: "https://kineticrecess.com",
+        Referer: "https://kineticrecess.com/",
+      },
       body: JSON.stringify({
         ...fields,
         email: visitorEmail,        // FormSubmit uses this as reply-to + _autoresponse target
