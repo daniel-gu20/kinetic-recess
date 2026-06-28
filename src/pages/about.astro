@@ -1,0 +1,77 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ChalkDivider from "../components/ChalkDivider.astro";
+import { STORY, FAQS, CTA } from "../data/site";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<Layout title="How Recess Works" description="The rules, the structured arguing, and why grown adults need a playground after dark." path="/about" jsonLd={jsonLd}>
+  <!-- Hero -->
+  <section class="relative h-[46vh] min-h-[360px] flex items-end overflow-hidden">
+    <img src="/images/four-square-court.png" alt="An empty four-square court under a single floodlight at night" fetchpriority="high" class="absolute inset-0 w-full h-full object-cover" />
+    <div class="absolute inset-0 scrim-bottom"></div>
+    <div class="relative w-full max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop pb-stack-md pt-28">
+      <p class="font-accent-script text-[24px] text-secondary-fixed">Why grown adults need a playground</p>
+      <h1 class="font-display text-[clamp(2.5rem,8vw,5.5rem)] leading-none uppercase text-on-primary">How recess works</h1>
+    </div>
+  </section>
+
+  <!-- Story -->
+  <section class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl">
+    <h2 class="font-display text-[clamp(1.8rem,5vw,3rem)] leading-[0.95] uppercase text-primary mb-stack-md">{STORY.heading}</h2>
+    <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed whitespace-pre-line">{STORY.body}</p>
+  </section>
+
+  <!-- The format strip -->
+  <section class="bg-primary text-on-primary">
+    <div class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl grid md:grid-cols-3 gap-gutter">
+      <div>
+        <span class="font-display text-[48px] leading-none text-secondary-fixed">Real games</span>
+        <p class="font-body-md text-body-md text-on-primary/75 mt-2">Dodgeball, four square, capture the flag, kickball. The playground canon, unchanged.</p>
+      </div>
+      <div>
+        <span class="font-display text-[48px] leading-none text-secondary-fixed">Real parks</span>
+        <p class="font-body-md text-body-md text-on-primary/75 mt-2">Permitted Toronto parks, after dark, under the floodlights. We hold the permit.</p>
+      </div>
+      <div>
+        <span class="font-display text-[48px] leading-none text-secondary-fixed">A real referee</span>
+        <p class="font-body-md text-body-md text-on-primary/75 mt-2">Not to stop the arguing. To make it official. The dispute is the feature.</p>
+      </div>
+    </div>
+  </section>
+
+  <ChalkDivider />
+
+  <!-- FAQ -->
+  <section class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop pb-stack-xl">
+    <h2 class="font-display text-[clamp(1.8rem,5vw,3rem)] leading-none uppercase text-primary mb-stack-md text-center">Frequently asked</h2>
+    <div class="divide-y-2 divide-primary border-y-2 border-primary">
+      {FAQS.map((f) => (
+        <details class="group">
+          <summary class="flex items-center justify-between gap-4 cursor-pointer py-5 list-none">
+            <span class="font-headline-md text-[20px] md:text-[22px] uppercase text-primary">{f.q}</span>
+            <span class="material-symbols-outlined text-primary transition-transform group-open:rotate-45 shrink-0">add</span>
+          </summary>
+          <p class="font-body-md text-body-md text-on-surface-variant pb-6 max-w-2xl">{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- CTA band -->
+  <section class="bg-secondary-fixed text-on-secondary-fixed">
+    <div class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-md flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+      <h2 class="font-display text-[clamp(1.8rem,4.5vw,3rem)] leading-none uppercase">Convinced, or want to argue about it in person?</h2>
+      <a href={CTA.primary.href} class="bg-on-secondary-fixed text-secondary-fixed px-9 py-4 font-display text-[20px] uppercase tracking-wide hover:bg-primary transition-colors shrink-0">See the schedule</a>
+    </div>
+  </section>
+</Layout>

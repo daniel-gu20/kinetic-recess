@@ -1,0 +1,76 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { CTA } from "../data/site";
+---
+
+<Layout title="Session Types" description="Public drop-in playground games versus private corporate bookings — pick the recess that fits." path="/sessions">
+  <!-- Intro -->
+  <section class="bg-primary text-on-primary pt-32 pb-stack-md">
+    <div class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop">
+      <p class="font-accent-script text-[26px] text-secondary-fixed">Two ways to play</p>
+      <h1 class="font-display text-[clamp(2.5rem,8vw,5.5rem)] leading-none uppercase">Public chaos, or private theater.</h1>
+      <p class="font-body-lg text-body-lg text-on-primary/80 mt-4 max-w-2xl">Show up solo and make temporary rivals, or book the whole thing for your team. Either way, there's a referee and there's an argument.</p>
+    </div>
+  </section>
+
+  <!-- Split panels -->
+  <section class="grid lg:grid-cols-2">
+    <!-- Public -->
+    <div class="relative min-h-[560px] flex items-end overflow-hidden border-b lg:border-b-0 lg:border-r border-secondary-fixed/40">
+      <img src="/images/dodgeball.png" alt="Foam-ball dodgeball under floodlights" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+      <div class="absolute inset-0 scrim-bottom"></div>
+      <div class="relative p-margin-mobile md:p-margin-desktop">
+        <span class="inline-block bg-secondary-fixed text-on-secondary-fixed font-label-bold text-label-bold uppercase px-3 py-1 mb-3">Public access</span>
+        <h2 class="font-display text-[clamp(2.2rem,6vw,4rem)] leading-[0.9] uppercase text-on-primary">The block party</h2>
+        <p class="font-body-lg text-body-lg text-on-primary/85 mt-4 max-w-md">
+          Drop-in, $18, capped at 24 strangers who become temporary rivals. Foam balls, no mercy,
+          one self-appointed villain per game. No suit required.
+        </p>
+        <ul class="mt-4 space-y-1 font-body-md text-body-md text-on-primary/75">
+          <li>· $18 per session · cap 24</li>
+          <li>· Real Toronto parks, after dark</li>
+          <li>· An official referee for the arguing</li>
+        </ul>
+        <a href={CTA.primary.href} class="inline-block mt-6 bg-secondary-fixed text-on-secondary-fixed px-8 py-4 font-display text-[20px] uppercase tracking-wide hover:bg-secondary-fixed-dim transition-colors">{CTA.primary.label}</a>
+      </div>
+    </div>
+
+    <!-- Corporate -->
+    <div class="relative min-h-[560px] flex items-end overflow-hidden bg-primary">
+      <img src="/images/corporate-team.png" alt="A corporate team mid-game under floodlights" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-90" />
+      <div class="absolute inset-0 scrim-bottom"></div>
+      <div class="relative p-margin-mobile md:p-margin-desktop">
+        <span class="inline-block border-2 border-on-primary text-on-primary font-label-bold text-label-bold uppercase px-3 py-1 mb-3">Bespoke events</span>
+        <h2 class="font-display text-[clamp(2.2rem,6vw,4rem)] leading-[0.9] uppercase text-on-primary">Corporate theater</h2>
+        <p class="font-body-lg text-body-lg text-on-primary/85 mt-4 max-w-md">
+          Private for your team, priced per group, and structured to keep the boardroom at bay.
+          Every booking funds a free community night for the public.
+        </p>
+        <ul class="mt-4 space-y-1 font-body-md text-body-md text-on-primary/75">
+          <li>· Private games for your whole team</li>
+          <li>· Priced per group · no deposit to inquire</li>
+          <li>· Funds a free community session</li>
+        </ul>
+        <a href={CTA.corporate.href} class="inline-block mt-6 border-2 border-on-primary text-on-primary px-8 py-4 font-display text-[20px] uppercase tracking-wide hover:bg-secondary-fixed hover:text-on-secondary-fixed hover:border-secondary-fixed transition-colors">{CTA.corporate.label}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison strip -->
+  <section class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl">
+    <div class="grid md:grid-cols-3 gap-gutter">
+      <div class="border border-border p-7 bg-surface-container-lowest">
+        <h3 class="font-headline-md text-[20px] uppercase text-primary mb-2">Price</h3>
+        <p class="font-body-md text-body-md text-on-surface-variant">Public is a flat $18 drop-in. Corporate is priced per group — get a quote on the booking form.</p>
+      </div>
+      <div class="border border-border p-7 bg-surface-container-lowest">
+        <h3 class="font-headline-md text-[20px] uppercase text-primary mb-2">Who's there</h3>
+        <p class="font-body-md text-body-md text-on-surface-variant">Public caps at 24 strangers. Corporate is just your team, on a park we permit for the night.</p>
+      </div>
+      <div class="border border-border p-7 bg-surface-container-lowest">
+        <h3 class="font-headline-md text-[20px] uppercase text-primary mb-2">The point</h3>
+        <p class="font-body-md text-body-md text-on-surface-variant">Both are real playground games with a referee. One you join; one you buy — and yours funds a free night.</p>
+      </div>
+    </div>
+  </section>
+</Layout>

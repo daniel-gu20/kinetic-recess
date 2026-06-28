@@ -1,0 +1,96 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { PARKS, SITE, CTA } from "../data/site";
+
+const jsonLd = PARKS.map((p) => ({
+  "@context": "https://schema.org",
+  "@type": "SportsActivityLocation",
+  name: `${SITE.name} — ${p.name}`,
+  address: { "@type": "PostalAddress", addressLocality: "Toronto", addressRegion: "ON", addressCountry: "CA" },
+  containedInPlace: { "@type": "Park", name: p.name },
+  openingHours: "Tu-Su 18:00-21:00",
+}));
+
+// Map facade swaps to a keyless OpenStreetMap embed on click (perf: defer the iframe).
+const mapInteractive =
+  "https://www.openstreetmap.org/export/embed.html?bbox=-79.55%2C43.62%2C-79.30%2C43.70&layer=mapnik";
+
+// Rough relative positions (%) for chalk pins on the facade.
+const pins = [
+  { name: "Trinity Bellwoods", x: 34, y: 56 },
+  { name: "Dufferin Grove", x: 26, y: 46 },
+  { name: "Christie Pits", x: 44, y: 40 },
+  { name: "Riverdale East", x: 68, y: 52 },
+];
+---
+
+<Layout title="Find a Park" description="Park locations, after-hours access notes, and what to bring. Trinity Bellwoods, Dufferin Grove, Christie Pits, Riverdale." path="/parks" headerSolid={true}>
+  <section class="grid lg:grid-cols-2">
+    <!-- Park list side -->
+    <div class="px-margin-mobile md:px-margin-desktop py-stack-md lg:pt-32 order-2 lg:order-1">
+      <p class="font-accent-script text-[24px] text-secondary">{SITE.location}</p>
+      <h1 class="font-display text-[clamp(2.5rem,7vw,5rem)] leading-[0.9] uppercase text-primary">Night courts</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant mt-3 mb-stack-md max-w-md">{SITE.hours} We rotate through permitted parks — every session listing names the park and meeting spot.</p>
+
+      <div class="flex flex-col gap-gutter">
+        {PARKS.map((p) => (
+          <article class="flex flex-col sm:flex-row border border-border bg-surface-container-lowest overflow-hidden">
+            <img src={p.image} alt={`${p.name} under floodlights at night`} loading="lazy" class="w-full sm:w-40 h-40 sm:h-auto object-cover shrink-0" />
+            <div class="p-5">
+              <div class="flex items-center justify-between gap-3">
+                <h2 class="font-headline-md text-[20px] uppercase text-primary">{p.name}</h2>
+                <span class="font-label-bold text-[11px] uppercase text-on-surface-variant shrink-0">{p.neighborhood}</span>
+              </div>
+              <p class="font-body-md text-[14px] text-on-surface-variant mt-2"><span class="font-semibold uppercase text-on-surface text-[12px]">Access · </span>{p.access}</p>
+              <p class="font-body-md text-[14px] text-on-surface-variant mt-1.5"><span class="font-semibold uppercase text-on-surface text-[12px]">Bring · </span>{p.bring}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <a href={CTA.primary.href} class="inline-block mt-stack-md bg-secondary-fixed text-on-secondary-fixed px-8 py-4 font-display text-[20px] uppercase tracking-wide hover:bg-secondary-fixed-dim transition-colors">{CTA.primary.label}</a>
+    </div>
+
+    <!-- Map facade side -->
+    <div class="relative min-h-[40vh] lg:min-h-full bg-primary order-1 lg:order-2 lg:sticky lg:top-0 lg:h-screen">
+      <div id="map-facade" class="absolute inset-0 cursor-pointer group overflow-hidden">
+        <!-- Chalk grid backdrop -->
+        <svg class="absolute inset-0 w-full h-full text-on-primary/15" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <pattern id="chalkgrid" width="48" height="48" patternUnits="userSpaceOnUse">
+              <path d="M48 0H0V48" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 6" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#chalkgrid)" />
+        </svg>
+        <!-- Chalk pins -->
+        {pins.map((p) => (
+          <div class="absolute -translate-x-1/2 -translate-y-full flex flex-col items-center" style={`left:${p.x}%; top:${p.y}%`}>
+            <span class="font-label-bold text-[11px] uppercase text-on-primary bg-primary/70 px-2 py-0.5 mb-1 whitespace-nowrap">{p.name}</span>
+            <span class="material-symbols-outlined text-secondary-fixed text-[34px] drop-shadow">location_on</span>
+          </div>
+        ))}
+        <div class="absolute inset-0 flex items-end justify-center pb-12">
+          <span class="bg-secondary-fixed text-on-secondary-fixed px-6 py-3 font-display text-[18px] uppercase tracking-wide group-hover:bg-secondary-fixed-dim transition-colors flex items-center gap-1">
+            <span class="material-symbols-outlined">map</span> Tap for interactive map
+          </span>
+        </div>
+        <div class="absolute top-6 left-6 bg-primary text-on-primary px-4 py-2 font-label-bold text-[12px] uppercase">
+          Active recess points · Lit status 100%
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script define:vars={{ mapInteractive }}>
+  const facade = document.getElementById("map-facade");
+  facade?.addEventListener("click", () => {
+    const iframe = document.createElement("iframe");
+    iframe.src = mapInteractive;
+    iframe.loading = "lazy";
+    iframe.className = "absolute inset-0 w-full h-full border-0";
+    iframe.title = "Interactive map of Kinetic Recess parks";
+    facade.replaceWith(iframe);
+  });
+</script>

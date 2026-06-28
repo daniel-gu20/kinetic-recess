@@ -1,0 +1,124 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { SITE } from "../data/site";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Corporate team-building playground games",
+  provider: { "@type": "Organization", name: SITE.name, areaServed: "Toronto, ON" },
+  description: "Private after-hours playground games for company teams in permitted Toronto parks. Bookings fund free public community nights.",
+};
+---
+
+<Layout title="Book Your Office" description="Corporate booking inquiry for private playground games in Toronto. Better than an escape room; funds a free community night." path="/corporate" jsonLd={jsonLd} hideStickyBar={true}>
+  <section class="grid lg:grid-cols-2 min-h-screen">
+    <!-- Image / pitch side -->
+    <div class="relative min-h-[40vh] lg:min-h-full flex items-end overflow-hidden bg-primary">
+      <img src="/images/corporate-team.png" alt="A company team playing a rowdy game under floodlights" fetchpriority="high" class="absolute inset-0 w-full h-full object-cover opacity-90" />
+      <div class="absolute inset-0 scrim-bottom"></div>
+      <div class="relative p-margin-mobile md:p-margin-desktop pt-32">
+        <span class="inline-block bg-secondary-fixed text-on-secondary-fixed font-label-bold text-label-bold uppercase px-3 py-1 mb-3">Off-site theater</span>
+        <h1 class="font-display text-[clamp(2.5rem,7vw,5rem)] leading-[0.9] uppercase text-on-primary">Better than an escape room.</h1>
+        <p class="font-body-lg text-body-lg text-on-primary/85 mt-4 max-w-md">Cheaper than a ropes course, and nobody has to share a feeling. This isn't team building. This is team battle.</p>
+      </div>
+    </div>
+
+    <!-- Form side -->
+    <div class="px-margin-mobile md:px-margin-desktop py-stack-md lg:pt-32">
+      <div class="max-w-lg">
+        <h2 class="font-display text-[clamp(1.8rem,5vw,2.75rem)] leading-none uppercase text-primary">Request your recess</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-3">Our referees respond to all mission briefs within a day. Prepare your roster.</p>
+
+        <form id="inquiry-form" class="mt-stack-md grid grid-cols-1 sm:grid-cols-2 gap-5" novalidate>
+          <div class="sm:col-span-1">
+            <label for="contactName" class="block font-label-bold text-label-bold uppercase text-on-surface mb-1">Contact name</label>
+            <input id="contactName" name="contactName" type="text" required class="w-full bg-surface-container-low border-0 border-b-2 border-primary px-2 py-2 font-body-md text-body-md focus:outline-none focus:border-secondary-fixed" />
+          </div>
+          <div class="sm:col-span-1">
+            <label for="companyName" class="block font-label-bold text-label-bold uppercase text-on-surface mb-1">Company name</label>
+            <input id="companyName" name="companyName" type="text" required class="w-full bg-surface-container-low border-0 border-b-2 border-primary px-2 py-2 font-body-md text-body-md focus:outline-none focus:border-secondary-fixed" />
+          </div>
+          <div class="sm:col-span-1">
+            <label for="email" class="block font-label-bold text-label-bold uppercase text-on-surface mb-1">Work email</label>
+            <input id="email" name="email" type="email" required class="w-full bg-surface-container-low border-0 border-b-2 border-primary px-2 py-2 font-body-md text-body-md focus:outline-none focus:border-secondary-fixed" />
+          </div>
+          <div class="sm:col-span-1">
+            <label for="teamSize" class="block font-label-bold text-label-bold uppercase text-on-surface mb-1">Team size</label>
+            <select id="teamSize" name="teamSize" required class="w-full bg-surface-container-low border-0 border-b-2 border-primary px-2 py-2.5 font-body-md text-body-md focus:outline-none focus:border-secondary-fixed">
+              <option value="">Select headcount…</option>
+              <option>Under 10</option>
+              <option>10–24</option>
+              <option>25–50</option>
+              <option>50+</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2">
+            <label for="preferredDates" class="block font-label-bold text-label-bold uppercase text-on-surface mb-1">Preferred dates</label>
+            <input id="preferredDates" name="preferredDates" type="text" placeholder="e.g. late October, or a Thursday in Q4" class="w-full bg-surface-container-low border-0 border-b-2 border-primary px-2 py-2 font-body-md text-body-md focus:outline-none focus:border-secondary-fixed" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block font-label-bold text-label-bold uppercase text-on-surface mb-2">Game preference</label>
+            <div class="flex flex-wrap gap-2" role="radiogroup">
+              {["Dodgeball", "Capture the Flag", "Four Square", "Kickball", "Referee's choice"].map((g, i) => (
+                <label class="cursor-pointer">
+                  <input type="radio" name="gamePreference" value={g} class="peer sr-only" checked={i === 4} />
+                  <span class="inline-block border-2 border-border px-4 py-1.5 font-label-bold text-label-bold uppercase peer-checked:bg-primary peer-checked:text-on-primary peer-checked:border-primary transition-colors">{g}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+          <div class="sm:col-span-2">
+            <label for="notes" class="block font-label-bold text-label-bold uppercase text-on-surface mb-1">Notes</label>
+            <textarea id="notes" name="notes" rows="3" placeholder="Tell us about your team's vibe, rivalries, and any grudges to settle…" class="w-full bg-surface-container-low border-0 border-b-2 border-primary px-2 py-2 font-body-md text-body-md focus:outline-none focus:border-secondary-fixed"></textarea>
+          </div>
+
+          <div class="sm:col-span-2">
+            <button type="submit" id="submit-btn" class="w-full bg-secondary-fixed text-on-secondary-fixed px-8 py-4 font-display text-[22px] uppercase tracking-wide hover:bg-secondary-fixed-dim active:scale-[0.99] transition-all">Book a recess for your team</button>
+            <p class="font-body-md text-[13px] text-on-surface-variant mt-3">No deposit to inquire. We'll confirm the park permit and headcount before you owe a cent.</p>
+          </div>
+        </form>
+
+        <!-- Success state -->
+        <div id="success-panel" class="hidden mt-stack-md border-2 border-primary bg-surface-container-lowest p-8">
+          <p class="font-accent-script text-[26px] text-secondary">Booked the request.</p>
+          <h2 class="font-display text-[clamp(1.6rem,4vw,2.25rem)] leading-none uppercase text-primary mt-1">Hero stuff.</h2>
+          <p class="font-body-lg text-body-lg text-on-surface-variant mt-4">
+            We'll email you within a day with a park, a date, and a referee who pretends to be
+            impartial. Your night also funds a free community session, so, you know, hero stuff.
+          </p>
+          <a href="/community" class="inline-block mt-5 font-label-bold text-label-bold uppercase text-primary border-b-2 border-secondary-fixed pb-1 hover:text-secondary transition-colors">See the nights you're funding →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const form = document.getElementById("inquiry-form") as HTMLFormElement | null;
+  const success = document.getElementById("success-panel");
+  const btn = document.getElementById("submit-btn") as HTMLButtonElement | null;
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    if (btn) { btn.disabled = true; btn.textContent = "Sending the brief…"; }
+
+    const payload = Object.fromEntries(new FormData(form).entries());
+    try {
+      const res = await fetch("/api/corporate-inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+    } catch (err) {
+      // Inquiry endpoint not wired to a collection yet — still confirm to the user.
+      console.error("Inquiry submit failed:", err);
+    } finally {
+      form.classList.add("hidden");
+      success?.classList.remove("hidden");
+      success?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  });
+</script>

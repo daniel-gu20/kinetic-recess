@@ -1,0 +1,20 @@
+---
+import { CTA } from "../data/site";
+---
+
+<!-- Mobile-only sticky conversion bar; hidden on lg+ -->
+<div
+  class="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-primary/95 backdrop-blur-sm border-t-2 border-secondary-fixed px-4 py-3 flex items-center justify-between gap-3"
+>
+  <div class="leading-tight">
+    <p class="font-label-bold text-[11px] uppercase tracking-wide text-secondary-fixed/80">Sessions cap at 24</p>
+    <p class="font-body-md text-[13px] text-on-primary/80">They fill. Claim yours.</p>
+  </div>
+  <a
+    href={CTA.primary.href}
+    class="bg-secondary-fixed text-on-secondary-fixed px-6 py-3 font-display text-[16px] uppercase tracking-wide active:scale-95 transition-transform"
+    >{CTA.primary.label}</a
+  >
+</div>
+<!-- Spacer so content isn't hidden behind the bar -->
+<div class="lg:hidden h-20" aria-hidden="true"></div>

@@ -1,0 +1,119 @@
+---
+import { NAV, CTA, SITE } from "../data/site";
+
+interface Props {
+  path?: string;
+  /** Start solid (for pages whose top section is light) instead of transparent-over-hero */
+  solid?: boolean;
+}
+const { path = "/", solid = false } = Astro.props;
+
+const isActive = (href: string) =>
+  href === "/" ? path === "/" : path.startsWith(href);
+---
+
+<header
+  id="site-header"
+  data-solid={solid ? "true" : "false"}
+  class:list={[
+    "fixed top-0 inset-x-0 z-50 transition-colors duration-300",
+    solid ? "bg-primary" : "bg-transparent",
+  ]}
+>
+  {!solid && <div class="absolute inset-0 scrim-top pointer-events-none"></div>}
+  <nav class="relative flex justify-between items-center gap-4 px-margin-mobile md:px-margin-desktop py-4 md:py-5 max-w-(--container-max-width) mx-auto">
+    <a
+      href="/"
+      class="font-display text-[28px] md:text-[34px] leading-none text-secondary-fixed tracking-tight uppercase"
+      >Kinetic Recess</a
+    >
+
+    <div class="hidden lg:flex items-center gap-7">
+      {
+        NAV.slice(1).map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              "font-label-bold text-label-bold uppercase transition-colors",
+              isActive(item.href)
+                ? "text-secondary-fixed border-b-2 border-secondary-fixed pb-0.5"
+                : "text-on-primary/85 hover:text-secondary-fixed",
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="flex items-center gap-2">
+      <a
+        href={CTA.primary.href}
+        class="hidden sm:inline-block bg-secondary-fixed text-on-secondary-fixed px-5 py-2.5 font-display text-[16px] uppercase tracking-wide hover:bg-secondary-fixed-dim active:scale-95 transition-all duration-150"
+        >{CTA.primary.label}</a
+      >
+      <button
+        id="menu-toggle"
+        aria-label="Open menu"
+        aria-expanded="false"
+        class="lg:hidden text-on-primary p-2 -mr-2"
+      >
+        <span class="material-symbols-outlined text-[28px]">menu</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    class="lg:hidden hidden bg-primary border-t border-white/10"
+  >
+    <div class="flex flex-col px-margin-mobile py-4">
+      {
+        NAV.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              "py-3 font-label-bold text-label-bold uppercase border-b border-white/10",
+              isActive(item.href) ? "text-secondary-fixed" : "text-on-primary/90",
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a
+        href={CTA.primary.href}
+        class="mt-4 bg-secondary-fixed text-on-secondary-fixed text-center px-5 py-3 font-display text-[18px] uppercase tracking-wide"
+        >{CTA.primary.label}</a
+      >
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById("site-header");
+  const startsSolid = header?.dataset.solid === "true";
+
+  const onScroll = () => {
+    if (!header || startsSolid) return;
+    if (window.scrollY > 40) {
+      header.classList.add("bg-primary");
+      header.classList.remove("bg-transparent");
+      header.querySelector(".scrim-top")?.classList.add("opacity-0");
+    } else {
+      header.classList.remove("bg-primary");
+      header.classList.add("bg-transparent");
+      header.querySelector(".scrim-top")?.classList.remove("opacity-0");
+    }
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  toggle?.addEventListener("click", () => {
+    const open = menu?.classList.toggle("hidden") === false;
+    toggle.setAttribute("aria-expanded", String(open));
+  });
+</script>

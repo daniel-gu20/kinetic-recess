@@ -1,0 +1,102 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SessionCard from "../components/SessionCard.astro";
+import { SESSIONS, SITE } from "../data/site";
+
+const days = ["All", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const parks = ["All parks", ...Array.from(new Set(SESSIONS.map((s) => s.park)))];
+
+const jsonLd = SESSIONS.map((s) => ({
+  "@context": "https://schema.org",
+  "@type": "SportsEvent",
+  name: s.gameName,
+  sport: s.gameName.replace(/\s*\(.*\)/, ""),
+  eventStatus: s.spotsLeft > 0 ? "https://schema.org/EventScheduled" : "https://schema.org/EventScheduled",
+  location: { "@type": "Place", name: s.park, address: { "@type": "PostalAddress", addressLocality: "Toronto", addressRegion: "ON" } },
+  offers: { "@type": "Offer", price: "18", priceCurrency: "CAD", availability: s.spotsLeft > 0 ? "https://schema.org/InStock" : "https://schema.org/SoldOut" },
+  organizer: { "@type": "Organization", name: SITE.name },
+}));
+---
+
+<Layout title="The Schedule" description="The weekly grid of playground games across Toronto parks. Dodgeball, four square, capture the flag and kickball, Tuesday through Sunday." path="/schedule" jsonLd={jsonLd}>
+  <!-- Hero banner -->
+  <section class="relative h-[40vh] min-h-[320px] flex items-end overflow-hidden">
+    <img src="/images/capture-the-flag.png" alt="Adults playing capture the flag in a floodlit Toronto park" fetchpriority="high" class="absolute inset-0 w-full h-full object-cover" />
+    <div class="absolute inset-0 scrim-bottom"></div>
+    <div class="relative w-full max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop pb-stack-md pt-28">
+      <h1 class="font-display text-[clamp(2.5rem,8vw,5.5rem)] leading-none uppercase text-on-primary">The Schedule</h1>
+      <p class="font-accent-script text-[24px] text-secondary-fixed">Tue–Sun, after dark. Pick your battlefield.</p>
+    </div>
+  </section>
+
+  <!-- Filter bar -->
+  <section class="sticky top-[64px] z-30 bg-background/95 backdrop-blur border-b-2 border-primary">
+    <div class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="flex items-center gap-5 overflow-x-auto hide-scrollbar" id="day-filter">
+        {days.map((d, i) => (
+          <button data-day={d} class:list={["whitespace-nowrap font-label-bold text-label-bold uppercase pb-1 transition-opacity", i === 0 ? "text-on-surface border-b-2 border-secondary-fixed" : "text-on-surface/50 hover:text-on-surface"]}>{d === "All" ? "All days" : d}</button>
+        ))}
+      </div>
+      <div class="flex items-center gap-3 shrink-0">
+        <span class="font-label-bold text-[12px] uppercase text-on-surface/40">Park:</span>
+        <select id="park-filter" class="bg-transparent border border-border px-3 py-1.5 font-label-bold text-label-bold uppercase text-on-surface focus:outline-none focus:border-secondary-fixed cursor-pointer">
+          {parks.map((p) => <option value={p}>{p}</option>)}
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Session grid -->
+  <section class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-md">
+    <div id="session-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+      {SESSIONS.map((s) => (
+        <div class="session-item" data-day={s.dayOfWeek.slice(0, 3)} data-park={s.park}>
+          <SessionCard session={s} />
+        </div>
+      ))}
+    </div>
+    <p id="empty-state" class="hidden text-center font-headline-md text-[24px] uppercase text-on-surface-variant py-stack-md">No games match — try another day or park.</p>
+
+    <div class="flex flex-col items-center gap-3 py-stack-md text-center">
+      <p class="font-accent-script text-[26px] text-primary -rotate-2">Corporate takeover available.</p>
+      <a href="/corporate" class="font-label-bold text-label-bold uppercase text-primary border-b-2 border-secondary-fixed pb-1 hover:text-secondary transition-colors">Book your team →</a>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const grid = document.getElementById("session-grid");
+  const items = Array.from(document.querySelectorAll<HTMLElement>(".session-item"));
+  const dayButtons = Array.from(document.querySelectorAll<HTMLButtonElement>("#day-filter button"));
+  const parkSelect = document.getElementById("park-filter") as HTMLSelectElement;
+  const empty = document.getElementById("empty-state");
+  let activeDay = "All";
+
+  function apply() {
+    const park = parkSelect.value;
+    let visible = 0;
+    items.forEach((it) => {
+      const dayOk = activeDay === "All" || it.dataset.day === activeDay;
+      const parkOk = park === "All parks" || it.dataset.park === park;
+      const show = dayOk && parkOk;
+      it.style.display = show ? "" : "none";
+      if (show) visible++;
+    });
+    empty?.classList.toggle("hidden", visible !== 0);
+  }
+
+  dayButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      activeDay = btn.dataset.day || "All";
+      dayButtons.forEach((b) => {
+        const on = b === btn;
+        b.classList.toggle("text-on-surface", on);
+        b.classList.toggle("border-b-2", on);
+        b.classList.toggle("border-secondary-fixed", on);
+        b.classList.toggle("text-on-surface/50", !on);
+      });
+      apply();
+    });
+  });
+  parkSelect.addEventListener("change", apply);
+</script>

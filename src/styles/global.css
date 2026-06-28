@@ -1,0 +1,181 @@
+@import "tailwindcss";
+
+/*
+  Kinetic Recess — "After Dark Athletics" design system.
+  Token names mirror the Stitch DESIGN.md so the generated markup ports cleanly.
+  Palette: midnight navy + warm chalk-paper + high-vis chalk yellow.
+*/
+@theme {
+  /* Surfaces */
+  --color-background: #fdf9ea;
+  --color-surface: #fdf9ea;
+  --color-surface-dim: #dedacc;
+  --color-surface-bright: #fdf9ea;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f8f4e5;
+  --color-surface-container: #f2eedf;
+  --color-surface-container-high: #ece8da;
+  --color-surface-container-highest: #e6e3d4;
+  --color-surface-variant: #e6e3d4;
+
+  /* Text */
+  --color-on-surface: #1c1c13;
+  --color-on-surface-variant: #45464d;
+  --color-on-background: #1c1c13;
+  --color-inverse-surface: #323127;
+  --color-inverse-on-surface: #f5f1e2;
+
+  /* Primary — midnight navy (cinematic dark sections / scrims) */
+  --color-primary: #11192e;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #131b30;
+  --color-on-primary-container: #7b839d;
+  --color-inverse-primary: #bec6e2;
+  --color-primary-fixed: #dae2ff;
+  --color-primary-fixed-dim: #bec6e2;
+  --color-on-primary-fixed: #131b30;
+  --color-on-primary-fixed-variant: #3e465d;
+
+  /* Secondary — chalk yellow (the spark / CTAs) */
+  --color-secondary: #6b5f00;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #ffe74c;
+  --color-on-secondary-container: #726500;
+  --color-secondary-fixed: #ffe74c;
+  --color-secondary-fixed-dim: #dec72c;
+  --color-on-secondary-fixed: #201c00;
+  --color-on-secondary-fixed-variant: #514700;
+
+  /* Tertiary — near-black (footer) + tarnished gold accents on light */
+  --color-tertiary: #000000;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #261a00;
+  --color-on-tertiary-container: #a87d00;
+  --color-tertiary-fixed: #ffdf9f;
+  --color-tertiary-fixed-dim: #f5be3b;
+  --color-on-tertiary-fixed: #261a00;
+  --color-on-tertiary-fixed-variant: #5c4300;
+
+  /* Outlines */
+  --color-outline: #76777d;
+  --color-outline-variant: #c6c6cd;
+  --color-border: #e2ddcf;
+
+  /* Status */
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  /* Fonts */
+  --font-display: "Anton", sans-serif;
+  --font-display-lg: "Anton", sans-serif;
+  --font-display-2xl: "Anton", sans-serif;
+  --font-headline-md: "Anton", sans-serif;
+  --font-body-md: "Archivo Narrow", sans-serif;
+  --font-body-lg: "Archivo Narrow", sans-serif;
+  --font-label-bold: "Archivo Narrow", sans-serif;
+  --font-accent-script: "Caveat", "Brush Script MT", cursive;
+
+  /* Type scale (sizes; line-heights below) */
+  --text-display-2xl: 120px;
+  --text-display-2xl--line-height: 110px;
+  --text-display-2xl--letter-spacing: -0.02em;
+  --text-display-lg: 72px;
+  --text-display-lg--line-height: 68px;
+  --text-display-lg--letter-spacing: -0.01em;
+  --text-display-lg-mobile: 48px;
+  --text-display-lg-mobile--line-height: 44px;
+  --text-display-lg-mobile--letter-spacing: -0.01em;
+  --text-headline-md: 32px;
+  --text-headline-md--line-height: 36px;
+  --text-headline-md--letter-spacing: 0.02em;
+  --text-body-lg: 20px;
+  --text-body-lg--line-height: 30px;
+  --text-body-md: 16px;
+  --text-body-md--line-height: 24px;
+  --text-label-bold: 14px;
+  --text-label-bold--line-height: 20px;
+  --text-label-bold--letter-spacing: 0.05em;
+  --text-accent-script: 24px;
+  --text-accent-script--line-height: 24px;
+
+  /* Spacing tokens */
+  --spacing-gutter: 24px;
+  --spacing-stack-sm: 16px;
+  --spacing-stack-md: 48px;
+  --spacing-stack-xl: 120px;
+  --spacing-margin-mobile: 20px;
+  --spacing-margin-desktop: 64px;
+
+  /* Layout */
+  --container-max-width: 1280px;
+
+  /* Sharp shapes per design system */
+  --radius: 0;
+}
+
+/* max-w-container-max helper to match Stitch markup */
+@utility container-max {
+  max-width: 1280px;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-on-background);
+    font-family: var(--font-body-md);
+  }
+  /* Honor reduced-motion: snap chalk-draw reveals to final state */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+    .chalk-draw {
+      stroke-dashoffset: 0 !important;
+    }
+  }
+}
+
+/* Navy scrims for text legibility over photography */
+.scrim-bottom {
+  background: linear-gradient(
+    to top,
+    rgba(17, 25, 46, 0.85) 0%,
+    rgba(17, 25, 46, 0.4) 45%,
+    rgba(17, 25, 46, 0) 100%
+  );
+}
+.scrim-top {
+  background: linear-gradient(
+    to bottom,
+    rgba(17, 25, 46, 0.6) 0%,
+    rgba(17, 25, 46, 0) 100%
+  );
+}
+.scrim-left {
+  background: linear-gradient(
+    to right,
+    rgba(17, 25, 46, 0.85) 0%,
+    rgba(17, 25, 46, 0.3) 50%,
+    rgba(17, 25, 46, 0) 100%
+  );
+}
+
+/* Hide scrollbars on filter rails */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Chalk-draw line reveal (SVG stroke). Add .chalk-draw to a stroked path. */
+.chalk-draw {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: chalk-stroke 0.9s ease-out forwards;
+}
+@keyframes chalk-stroke {
+  to { stroke-dashoffset: 0; }
+}

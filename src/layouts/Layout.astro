@@ -1,0 +1,88 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import MobileStickyBar from "../components/MobileStickyBar.astro";
+import { SITE } from "../data/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Path of current page, used to highlight active nav item */
+  path?: string;
+  /** JSON-LD object(s) injected into <head> */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Hide the mobile sticky "Grab a spot" bar (e.g. on the corporate form page) */
+  hideStickyBar?: boolean;
+  /** Start the header solid (for pages whose top section is light) */
+  headerSolid?: boolean;
+}
+
+const {
+  title = SITE.name,
+  description = SITE.tagline,
+  path = Astro.url.pathname,
+  jsonLd,
+  hideStickyBar = false,
+  headerSolid = false,
+} = Astro.props;
+
+const fullTitle = title === SITE.name ? `${SITE.name} — ${SITE.tagline}` : `${title} | ${SITE.name}`;
+const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <!-- Fonts: Anton (display) + Archivo Narrow (body) + Caveat (chalk accent) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Caveat:wght@500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
+      rel="stylesheet"
+    />
+
+    {jsonLdArray.map((obj) => (
+      <script type="application/ld+json" set:html={JSON.stringify(obj)} />
+    ))}
+  </head>
+  <body class="bg-background text-on-background font-body-md antialiased selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+    <Header path={path} solid={headerSolid} />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    {!hideStickyBar && <MobileStickyBar />}
+  </body>
+</html>
+
+<style is:global>
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+  }
+  .material-symbols-outlined {
+    font-family: "Material Symbols Outlined";
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    vertical-align: middle;
+  }
+</style>

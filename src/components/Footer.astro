@@ -1,0 +1,51 @@
+---
+import { SITE, NAV } from "../data/site";
+const year = 2026;
+---
+
+<footer class="bg-tertiary text-on-tertiary border-t-2 border-secondary-fixed">
+  <div class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-md">
+    <div class="flex flex-col md:flex-row md:justify-between gap-stack-md">
+      <div class="flex flex-col gap-3 max-w-sm">
+        <span class="font-display text-[44px] md:text-[56px] leading-[0.9] text-secondary-fixed uppercase"
+          >Kinetic<br />Recess</span
+        >
+        <p class="font-body-md text-body-md text-on-tertiary/70">
+          Real playground games in permitted Toronto parks, after hours. Corporate
+          bookings fund free community nights.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-stack-md">
+        <nav class="flex flex-col gap-2.5">
+          <span class="font-label-bold text-label-bold uppercase text-secondary-fixed/80 mb-1">Explore</span>
+          {
+            NAV.slice(1).map((item) => (
+              <a
+                href={item.href}
+                class="font-label-bold text-label-bold uppercase text-on-tertiary/75 hover:text-secondary-fixed transition-colors"
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+        <div class="flex flex-col gap-2.5">
+          <span class="font-label-bold text-label-bold uppercase text-secondary-fixed/80 mb-1">Follow</span>
+          <a href={SITE.socials.instagram.href} class="font-label-bold text-label-bold uppercase text-on-tertiary/75 hover:text-secondary-fixed transition-colors">{SITE.socials.instagram.label}</a>
+          <a href={SITE.socials.foursquare.href} class="font-label-bold text-label-bold uppercase text-on-tertiary/75 hover:text-secondary-fixed transition-colors">{SITE.socials.foursquare.label}</a>
+          <span class="font-body-md text-body-md text-on-tertiary/55 mt-2 max-w-[14rem]">{SITE.location} · {SITE.hours}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-stack-md pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:justify-between gap-3">
+      <p class="font-body-md text-[13px] uppercase tracking-wide text-on-tertiary/55">
+        © {year} {SITE.name}. Est. {SITE.established}. No journey, just recess.
+      </p>
+      <p class="font-accent-script text-[22px] text-secondary-fixed/90 leading-none">
+        You're just taller now.
+      </p>
+    </div>
+  </div>
+</footer>

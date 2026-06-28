@@ -1,0 +1,164 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SessionCard from "../components/SessionCard.astro";
+import ChalkDivider from "../components/ChalkDivider.astro";
+import { SESSIONS, REVIEWS, HOW_IT_WORKS, COMMUNITY_NIGHTS, CTA, SITE } from "../data/site";
+
+const thisWeek = SESSIONS.slice(0, 3);
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SportsActivityLocation",
+  name: SITE.name,
+  description: SITE.tagline,
+  address: { "@type": "PostalAddress", addressLocality: "Toronto", addressRegion: "ON", addressCountry: "CA" },
+  priceRange: "$$",
+  sameAs: [SITE.socials.instagram.href, SITE.socials.foursquare.href],
+};
+---
+
+<Layout title={SITE.name} path="/" jsonLd={jsonLd}>
+  <!-- 1 ── Hero -->
+  <section class="relative min-h-[88vh] flex items-end overflow-hidden">
+    <img
+      src="/images/hero-playground-night.png"
+      alt="A floodlit Toronto schoolyard field at night with adults playing a rowdy game and the city skyline behind"
+      fetchpriority="high"
+      width="1344"
+      height="768"
+      class="absolute inset-0 w-full h-full object-cover"
+    />
+    <div class="absolute inset-0 scrim-bottom"></div>
+    <div class="relative w-full max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop pb-stack-md pt-32">
+      <p class="font-accent-script text-[26px] md:text-[32px] text-secondary-fixed mb-2">After-hours playground league · Toronto</p>
+      <h1 class="font-display text-[clamp(2.5rem,9vw,7.5rem)] leading-[0.88] text-on-primary uppercase max-w-5xl">
+        Recess is back. <span class="text-secondary-fixed">You're just taller now.</span>
+      </h1>
+      <p class="font-body-lg text-body-lg text-on-primary/85 mt-6 max-w-xl">
+        You peaked at four square in grade five. We built a league so you can prove it —
+        real playground games in floodlit Toronto parks after work.
+      </p>
+      <div class="mt-8 flex flex-col sm:flex-row gap-3">
+        <a href={CTA.primary.href} class="bg-secondary-fixed text-on-secondary-fixed text-center px-8 py-4 font-display text-[20px] uppercase tracking-wide hover:bg-secondary-fixed-dim active:scale-95 transition-all">{CTA.primary.label}</a>
+        <a href={CTA.corporate.href} class="border-2 border-on-primary/70 text-on-primary text-center px-8 py-4 font-display text-[20px] uppercase tracking-wide hover:border-secondary-fixed hover:text-secondary-fixed transition-colors">Book your office</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 ── How it works -->
+  <section class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl">
+    <h2 class="font-display text-[clamp(2rem,5vw,3.5rem)] leading-none uppercase text-primary mb-2">How recess works</h2>
+    <p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-md max-w-xl">Three steps. No memberships. No journey.</p>
+    <div class="grid md:grid-cols-3 gap-gutter">
+      {HOW_IT_WORKS.map((step) => (
+        <div class="bg-surface-container-lowest border border-border p-8">
+          <span class="font-display text-[64px] leading-none text-secondary-fixed-dim">{step.n}</span>
+          <h3 class="font-headline-md text-[24px] uppercase text-primary mt-3 mb-2">{step.title}</h3>
+          <p class="font-body-md text-body-md text-on-surface-variant">{step.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <ChalkDivider />
+
+  <!-- 3 ── This week's games -->
+  <section class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop pb-stack-xl">
+    <div class="flex flex-wrap items-end justify-between gap-4 mb-stack-md">
+      <div>
+        <p class="font-accent-script text-[24px] text-secondary inline-block -rotate-1">This week</p>
+        <h2 class="font-display text-[clamp(2rem,5vw,3.5rem)] leading-none uppercase text-primary">Pick your battlefield</h2>
+      </div>
+      <a href="/schedule" class="font-label-bold text-label-bold uppercase text-primary border-b-2 border-secondary-fixed pb-1 hover:text-secondary transition-colors">See the full schedule →</a>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+      {thisWeek.map((s) => <SessionCard session={s} />)}
+    </div>
+  </section>
+
+  <!-- 4 ── Community nights (funded by corporate) -->
+  <section class="bg-primary text-on-primary">
+    <div class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl grid lg:grid-cols-2 gap-stack-md items-center">
+      <div>
+        <p class="font-accent-script text-[24px] text-secondary-fixed">Funded by corporate</p>
+        <h2 class="font-display text-[clamp(2rem,5vw,3.5rem)] leading-[0.95] uppercase mt-1">Your team-building literally buys someone else recess.</h2>
+        <p class="font-body-lg text-body-lg text-on-primary/80 mt-5 max-w-lg">
+          Every office we run pays for a free community night. Same parks, same games, no fee —
+          for anyone who shows up.
+        </p>
+        <a href={CTA.free.href} class="inline-block mt-7 bg-secondary-fixed text-on-secondary-fixed px-7 py-3.5 font-display text-[18px] uppercase tracking-wide hover:bg-secondary-fixed-dim transition-colors">{CTA.free.label}</a>
+      </div>
+      <div class="flex flex-col gap-3">
+        {COMMUNITY_NIGHTS.map((n) => (
+          <div class="border border-white/15 p-5 flex items-center justify-between gap-4 hover:border-secondary-fixed transition-colors">
+            <div>
+              <h3 class="font-headline-md text-[20px] uppercase text-secondary-fixed">{n.gameName}</h3>
+              <p class="font-body-md text-body-md text-on-primary/70">{n.date} · {n.park}</p>
+            </div>
+            <span class="font-label-bold text-[12px] uppercase text-on-primary/60 text-right shrink-0">{n.spotsLeft} spots<br/>free</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 ── Book your office -->
+  <section class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl grid lg:grid-cols-2 gap-stack-md items-center">
+    <div class="relative aspect-[4/3] overflow-hidden border border-border order-2 lg:order-1">
+      <img src="/images/corporate-team.png" alt="A corporate team playing a rowdy game under floodlights" loading="lazy" class="w-full h-full object-cover" />
+    </div>
+    <div class="order-1 lg:order-2">
+      <p class="font-accent-script text-[24px] text-secondary -rotate-1">Book your office</p>
+      <h2 class="font-display text-[clamp(2rem,5vw,3.5rem)] leading-[0.95] uppercase text-primary mt-1">Better than an escape room.</h2>
+      <p class="font-body-lg text-body-lg text-on-surface-variant mt-5 max-w-lg">
+        Cheaper than a ropes course, and nobody has to share a feeling. Private games for your
+        team, priced per group — and every booking funds a free community night.
+      </p>
+      <a href={CTA.corporate.href} class="inline-block mt-7 border-2 border-primary text-primary px-7 py-3.5 font-display text-[18px] uppercase tracking-wide hover:bg-primary hover:text-on-primary transition-colors">{CTA.corporate.label}</a>
+    </div>
+  </section>
+
+  <ChalkDivider />
+
+  <!-- 6 ── Reviews -->
+  <section class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop pb-stack-xl">
+    <h2 class="font-display text-[clamp(2rem,5vw,3.5rem)] leading-none uppercase text-primary mb-stack-md">Grown adults, genuinely out of breath.</h2>
+    <div class="grid md:grid-cols-3 gap-gutter">
+      {REVIEWS.map((r) => (
+        <figure class="bg-surface-container-lowest border border-border p-8 flex flex-col">
+          <span class="font-display text-[56px] leading-none text-secondary-fixed-dim">&ldquo;</span>
+          <blockquote class="font-body-lg text-body-lg text-on-surface -mt-4 mb-5">{r.quote}</blockquote>
+          <figcaption class="mt-auto">
+            <p class="font-headline-md text-[18px] uppercase text-primary">{r.name}</p>
+            <p class="font-body-md text-[14px] text-on-surface-variant">{r.detail}</p>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+
+  <!-- 7 ── The rules (and the arguing) -->
+  <section class="bg-tertiary text-on-tertiary">
+    <div class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-xl text-center">
+      <p class="font-accent-script text-[26px] text-secondary-fixed">The rules (and the arguing)</p>
+      <h2 class="font-display text-[clamp(2.2rem,6vw,5rem)] leading-[0.95] uppercase max-w-4xl mx-auto mt-2">
+        Yes, there's a referee. No, that won't stop the debate.
+      </h2>
+      <p class="font-body-lg text-body-lg text-on-tertiary/75 mt-6 max-w-xl mx-auto">
+        That's the whole point. Every session has an official whose real job is making the rules
+        disputes count. <a href="/about" class="text-secondary-fixed underline underline-offset-4 hover:no-underline">See how recess works →</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- 8 ── Grab a spot CTA band -->
+  <section class="bg-secondary-fixed text-on-secondary-fixed">
+    <div class="max-w-(--container-max-width) mx-auto px-margin-mobile md:px-margin-desktop py-stack-md flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+      <div>
+        <h2 class="font-display text-[clamp(1.8rem,4.5vw,3rem)] leading-none uppercase">Sessions cap at 24 and they fill.</h2>
+        <p class="font-body-lg text-body-lg mt-2">Claim your spot before the cool kids do.</p>
+      </div>
+      <a href={CTA.primary.href} class="bg-on-secondary-fixed text-secondary-fixed px-9 py-4 font-display text-[20px] uppercase tracking-wide hover:bg-primary transition-colors shrink-0">{CTA.primary.label}</a>
+    </div>
+  </section>
+</Layout>
