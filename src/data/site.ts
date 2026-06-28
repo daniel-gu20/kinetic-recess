@@ -263,6 +263,8 @@ export type Park = {
   access: string;
   bring: string;
   image: string;
+  lat: number;
+  lng: number;
 };
 
 export const PARKS: Park[] = [
@@ -272,6 +274,8 @@ export const PARKS: Park[] = [
     access: "Gate 4 entry off Dundas. Digital pass required; meet at the perimeter chalk grid.",
     bring: "Running shoes, water, thermal layer — it gets cold once the floodlights are the only heat.",
     image: "/images/four-square-court.webp",
+    lat: 43.6478,
+    lng: -79.4128,
   },
   {
     name: "Dufferin Grove Park",
@@ -279,6 +283,8 @@ export const PARKS: Park[] = [
     access: "Permitted after-hours field by the rink house. We hold the permit; just show up.",
     bring: "Outdoor soles, a friend, and your most disputed four-square memory.",
     image: "/images/kickball.webp",
+    lat: 43.6573,
+    lng: -79.4327,
   },
   {
     name: "Christie Pits Park",
@@ -286,6 +292,8 @@ export const PARKS: Park[] = [
     access: "Lower field, south entrance. Floodlit until 9pm; meeting spot is the dugout.",
     bring: "Cleats or grippy runners, water, and ice packs for the kickball slide.",
     image: "/images/kickball.webp",
+    lat: 43.6644,
+    lng: -79.4203,
   },
   {
     name: "Riverdale Park East",
@@ -293,6 +301,8 @@ export const PARKS: Park[] = [
     access: "Top of the hill by Broadview. After-hours access via the east path; we mark it with chalk.",
     bring: "Dark clothing optional, sprinting legs mandatory. Bring water.",
     image: "/images/capture-the-flag.webp",
+    lat: 43.6686,
+    lng: -79.3549,
   },
 ];
 
