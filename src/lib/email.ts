@@ -1,27 +1,37 @@
-// Transactional email via Resend (https://resend.com).
-// No-ops safely if RESEND_API_KEY is unset, so forms keep working without it.
+// Email via FormSubmit (https://formsubmit.co) — no account, key, or DNS needed.
+// One POST sends a notification to the team inbox AND an auto-reply confirmation
+// to the person who submitted (via _autoresponse). No-ops if TEAM_EMAIL is unset.
 
 const env = (k: string): string | undefined =>
   (import.meta as any).env?.[k] ?? (globalThis as any).process?.env?.[k];
 
-const API_KEY = () => env("RESEND_API_KEY");
-// Sending address. Until your domain is verified in Resend, use onboarding@resend.dev.
-const FROM = () => env("RESEND_FROM") || "Kinetic Recess <onboarding@resend.dev>";
-export const TEAM_EMAIL = () => env("TEAM_EMAIL");
+export const TEAM_EMAIL = () => env("TEAM_EMAIL") || "danielgu@wix.com";
 
-type SendArgs = { to: string; subject: string; html: string; replyTo?: string };
+type SubmissionArgs = {
+  visitorEmail: string;        // who filled the form — gets the auto-reply confirmation
+  subject: string;             // subject of the team-notification email
+  autoresponse: string;        // confirmation message sent to the visitor
+  fields: Record<string, string>; // shown in the team notification (formatted as a table)
+};
 
-export async function sendEmail({ to, subject, html, replyTo }: SendArgs): Promise<boolean> {
-  const key = API_KEY();
-  if (!key || !to) return false; // email disabled / no recipient — skip quietly
+export async function notifySubmission({ visitorEmail, subject, autoresponse, fields }: SubmissionArgs): Promise<boolean> {
+  const team = TEAM_EMAIL();
+  if (!team) return false;
   try {
-    const res = await fetch("https://api.resend.com/emails", {
+    const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(team)}`, {
       method: "POST",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: FROM(), to, subject, html, ...(replyTo ? { reply_to: replyTo } : {}) }),
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        ...fields,
+        email: visitorEmail,        // FormSubmit uses this as reply-to + _autoresponse target
+        _subject: subject,
+        _autoresponse: autoresponse,
+        _template: "table",
+        _captcha: "false",
+      }),
     });
     if (!res.ok) {
-      console.error("[email] Resend error", res.status, await res.text().catch(() => ""));
+      console.error("[email] FormSubmit error", res.status, await res.text().catch(() => ""));
       return false;
     }
     return true;
@@ -29,17 +39,4 @@ export async function sendEmail({ to, subject, html, replyTo }: SendArgs): Promi
     console.error("[email] send failed:", err);
     return false;
   }
-}
-
-// Small shared wrapper so both emails look on-brand.
-export function shell(body: string): string {
-  return `<div style="font-family:Arial,Helvetica,sans-serif;max-width:520px;margin:0 auto;color:#1c1c13">
-    <div style="background:#11192e;padding:20px 24px">
-      <span style="font-family:'Arial Black',sans-serif;color:#ffe74c;font-size:22px;letter-spacing:.5px;text-transform:uppercase">Kinetic Recess</span>
-    </div>
-    <div style="padding:24px;background:#fdf9ea;line-height:1.5">${body}</div>
-    <div style="padding:16px 24px;background:#000;color:#9a9a9a;font-size:12px">
-      Real playground games in permitted Toronto parks, after hours. · @kineticrecess
-    </div>
-  </div>`;
 }

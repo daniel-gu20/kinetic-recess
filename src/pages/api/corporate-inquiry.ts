@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { items } from "@wix/data";
 import { auth } from "@wix/essentials";
-import { sendEmail, shell, TEAM_EMAIL } from "../../lib/email";
+import { notifySubmission } from "../../lib/email";
 
 export const prerender = false;
 
@@ -40,25 +40,22 @@ export const POST: APIRoute = async ({ request }) => {
     const insert = auth.elevate(items.insert);
     await insert(COLLECTION_ID, item);
 
-    // Fire-and-forget emails (no-op if RESEND_API_KEY is unset).
-    sendEmail({
-      to: item.email,
-      subject: "Booked the request 🟡",
-      html: shell(
-        `<h2 style="margin:0 0 8px;text-transform:uppercase">Booked the request.</h2>
-         <p>We'll email you within a day with a park, a date, and a referee who pretends to be impartial.</p>
-         <p>Your night also funds a free community session, so, you know, hero stuff.</p>
-         <p style="color:#4A5570">No deposit to inquire — we'll confirm the park permit and headcount before you owe a cent.</p>`
-      ),
-    });
-    const team = TEAM_EMAIL();
-    if (team) sendEmail({
-      to: team,
-      replyTo: item.email,
+    // Notify the team + auto-reply to the submitter (no-op if email isn't set up).
+    notifySubmission({
+      visitorEmail: item.email,
       subject: `New corporate inquiry: ${item.companyName} (${item.teamSize || "?"})`,
-      html: shell(`<p><strong>${item.contactName}</strong>, ${item.companyName} — ${item.email}</p>
-        <p>Team size: ${item.teamSize || "—"} · Dates: ${item.preferredDates || "—"} · Game: ${item.gamePreference || "—"}</p>
-        <p>${item.notes || ""}</p>`),
+      autoresponse:
+        "Booked the request. We'll email you within a day with a park, a date, and a referee who " +
+        "pretends to be impartial. Your night also funds a free community session, so, you know, hero stuff.\n\n" +
+        "No deposit to inquire — we'll confirm the park permit and headcount before you owe a cent.\n\n— Kinetic Recess",
+      fields: {
+        Contact: item.contactName,
+        Company: item.companyName,
+        "Team size": item.teamSize || "—",
+        "Preferred dates": item.preferredDates || "—",
+        "Game preference": item.gamePreference || "—",
+        Notes: item.notes || "—",
+      },
     });
 
     return json({ ok: true }, 200);
